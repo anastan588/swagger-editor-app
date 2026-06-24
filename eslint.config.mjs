@@ -55,10 +55,7 @@ const eslintConfig = defineConfig([
       ...reactHooks.configs.recommended.rules,
       'react/prefer-stateless-function': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       // 'react/prefer-stateless-function': 'error',
       'react/button-has-type': 'error',
       'react/no-unused-prop-types': 'error',
@@ -69,17 +66,10 @@ const eslintConfig = defineConfig([
       'react/no-danger-with-children': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
       'react/jsx-fragments': 'error',
-      'react/destructuring-assignment': [
-        'error',
-        'always',
-        { destructureInSignature: 'always' },
-      ],
+      'react/destructuring-assignment': ['error', 'always', { destructureInSignature: 'always' }],
       'react/jsx-no-leaked-render': ['error', { validStrategies: ['ternary'] }],
       'react/jsx-max-depth': ['error', { max: 8 }],
-      'react/function-component-definition': [
-        'warn',
-        { namedComponents: 'arrow-function' },
-      ],
+      'react/function-component-definition': ['warn', { namedComponents: 'arrow-function' }],
       'react/jsx-key': [
         'error',
         {
@@ -89,17 +79,11 @@ const eslintConfig = defineConfig([
         },
       ],
       'react/jsx-no-useless-fragment': 'warn',
-      'react/jsx-curly-brace-presence': [
-        'warn',
-        { props: 'never', children: 'never' },
-      ],
+      'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
       'react/no-typos': 'warn',
       'react/display-name': 'warn',
       'react/self-closing-comp': 'warn',
-      'react/jsx-sort-props': [
-        'warn',
-        { callbacksLast: true, shorthandFirst: true, reservedFirst: true },
-      ],
+      'react/jsx-sort-props': ['warn', { callbacksLast: true, shorthandFirst: true, reservedFirst: true }],
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
 
