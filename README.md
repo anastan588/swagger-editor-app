@@ -111,6 +111,7 @@ npm run format:fix
 
 ## 👤 Contributors
 
-- **Anastasiya Andronava** ([@anastan588](https://github.com/anastan588))
-- **Tatsiana Hladkaya** ([@t-gladkaya](https://github.com/t-gladkaya))
-- **Artem Hlopov** ([@artemhlopov](https://github.com/artemhlopov))
+- **Anastasiya Andronava** ([@anastan588](https://github.com/anastan588)) — Developer
+- **Tatsiana Hladkaya** ([@t-gladkaya](https://github.com/t-gladkaya)) — Developer
+- **Artem Hlopov** ([@artemhlopov](https://github.com/artemhlopov)) — Developer
+- **Yahor Shulha** ([@egor-alexandrovich](https://github.com/egor-alexandrovich)) — Mentor / Code Reviewer
