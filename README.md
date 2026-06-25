@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Swagger Editor App
 
-## Getting Started
+A modern Web Application for editing Swagger/OpenAPI specifications, built with Next.js 16, React 19, Tailwind CSS v4, and Shadcn UI.
 
-First, run the development server:
+---
+
+## 🔗 Live Deployment
+
+The application is automatically built and deployed using Vercel:
+
+- **Production URL**: [https://swagger-editor-404-team.vercel.app/](https://swagger-editor-404-team.vercel.app/)
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org)
+- **Library**: [React 19](https://react.dev)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) & [Shadcn UI](https://shadcn.com)
+- **Internationalization**: [next-intl](https://vercel.app)
+- **Icons**: [Lucide React](https://lucide.dev)
+- **Testing**: [Vitest](https://vitest.dev) & [React Testing Library](https://testing-library.com)
+- **Code Quality**: ESLint, Prettier, Husky (Git Hooks)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+Ensure you have [Node.js](https://nodejs.org) installed (v20+ recommended).
+
+### 2. Installation
+
+Clone the repository and install the project dependencies:
+
+```bash
+npm install
+```
+
+### 3. Development Server
+
+Start the local development server with hot-reloading:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to explore the layout.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📜 Available Scripts
 
-## Learn More
+Run these automation scripts inside the root directory via `npm run <script-name>`:
 
-To learn more about Next.js, take a look at the following resources:
+| Script          | Description                                                            |
+| :-------------- | :--------------------------------------------------------------------- |
+| `dev`           | Starts the Next.js development server on port 3000.                    |
+| `build`         | Compiles and optimizes the application for production deployment.      |
+| `start`         | Launches the built production application server.                      |
+| `lint`          | Analyzes code structure to find and report syntax/pattern errors.      |
+| `format:fix`    | Rewrites all codebase files using Prettier configuration.              |
+| `test`          | Runs the Vitest test suite continuously in watch mode.                 |
+| `test:coverage` | Runs all Vitest tests once and generates an execution coverage report. |
+| `prepare`       | System script initializing Husky git hooks automatically.              |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧪 Testing and Quality Control
 
-## Deploy on Vercel
+### Run Tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project relies on **Vitest** for component and module assertions. Execute tests in local watch-mode:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run test
+```
+
+### Coverage Reports
+
+To evaluate logic pathways covered by current written scopes, compile testing metrics via V8 compilation:
+
+```bash
+npm run test:coverage
+```
+
+### Code Formatting
+
+To automatically adjust import sorting, brackets, and syntax formatting before committing:
+
+```bash
+npm run format:fix
+```
+
+---
+
+## 📁 Key Project Directory Structure
+
+```text
+├── .husky/              # Git hooks management
+├── app/                 # Next.js App Router root layout pages
+│   ├── [locale]/        # Localized path routines (next-intl)
+│   └── components/      # Shares application UI/UX block targets
+├── public/              # Static file assets (SVGs, favicon)
+├── tsconfig.json        # TypeScript configuration settings
+└── vitest.config.ts     # Vitest pipeline test execution layouts
+```
+
+---
+
+## 👤 Contributors
+
+- **Anastasiya Andronava** ([@anastan588](https://github.com/anastan588))
+- **Tatsiana Hladkaya** ([@t-gladkaya](https://github.com/t-gladkaya))
+- **Artem Hlopov** ([@artemhlopov](https://github.com/artemhlopov))
