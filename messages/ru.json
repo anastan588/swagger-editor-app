@@ -1,5 +1,14 @@
 {
   "HomePage": {
     "title": "Привет, Мир"
+  },
+  "Header": {
+    "logo": "Swagger Editor",
+    "editor": "Редактор",
+    "about": "О проекте",
+    "history": "История",
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "signOut": "Выйти"
   }
 }

@@ -1,5 +1,14 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "Header": {
+    "logo": "Swagger Editor",
+    "editor": "Editor",
+    "about": "About",
+    "history": "History",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out"
   }
 }

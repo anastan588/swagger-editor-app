@@ -4,6 +4,8 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 
+import Header from '../components/Header';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -27,7 +29,10 @@ export default function RootLayout({
   return (
     <html className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} lang="en">
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <Header />
+          <main className="flex flex-1 flex-col">{children}</main>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
