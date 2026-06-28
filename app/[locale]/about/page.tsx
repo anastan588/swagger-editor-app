@@ -111,15 +111,20 @@ const AboutPage = () => {
           {teamMembers.map((member) => (
             <article key={member.github} className="rounded-lg border bg-white p-5">
               <div className="mb-4 flex justify-center">
-                <Image alt={member.alt} className="size-28 rounded-full border object-cover" src={member.imageSrc} />
+                <Image
+                  alt={member.alt}
+                  className="size-28 rounded-full border object-cover"
+                  height={112}
+                  src={member.imageSrc}
+                  width={112}
+                />
               </div>
               <h3 className="font-semibold">{member.name}</h3>
 
               <p className="mt-1 text-sm text-muted-foreground">{member.role}</p>
 
               <div className="mt-4 flex items-center gap-2">
-                <Image alt="icon" className="size-5 shrink-0" src="/github.svg" />
-
+                <Image alt="icon" className="size-5 shrink-0" height={20} src="/github.svg" width={20} />
                 <a
                   className="text-sm font-medium text-primary hover:underline"
                   href={member.githubUrl}
