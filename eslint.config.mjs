@@ -87,7 +87,6 @@ const eslintConfig = defineConfig([
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
 
-
       // Сортировка импортов
       'simple-import-sort/imports': [
         'error',
