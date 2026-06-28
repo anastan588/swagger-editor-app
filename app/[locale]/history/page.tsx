@@ -1,0 +1,31 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+
+import { useAuth } from '@/app/components/AuthProvider';
+import { useRouter } from '@/i18n/navigation';
+
+const HistoryPage = () => {
+  const t = useTranslations('HistoryPage');
+  const router = useRouter();
+  const { isAuthenticated, isAuthReady } = useAuth();
+
+  useEffect(() => {
+    if (isAuthReady && !isAuthenticated) {
+      router.replace('/');
+    }
+  }, [isAuthenticated, isAuthReady, router]);
+
+  if (!isAuthReady || !isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <section className="mx-auto w-full max-w-7xl px-4 py-8">
+      <h1 className="text-2xl font-semibold">{t('title')}</h1>
+    </section>
+  );
+};
+
+export default HistoryPage;

@@ -87,6 +87,7 @@ const eslintConfig = defineConfig([
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
 
+
       // Сортировка импортов
       'simple-import-sort/imports': [
         'error',
@@ -103,6 +104,13 @@ const eslintConfig = defineConfig([
         },
       ],
       'simple-import-sort/exports': 'error',
+    },
+  },
+  {
+    files: ['app/**/layout.tsx', 'app/**/page.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+      'react/function-component-definition': 'off',
     },
   },
 ]);

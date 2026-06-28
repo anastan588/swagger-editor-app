@@ -1,14 +1,22 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
-import { Link } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 
+import { useAuth } from './AuthProvider';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
   const t = useTranslations('Header');
+  const router = useRouter();
+  const { isAuthenticated, isAuthReady, signOut } = useAuth();
 
-  const isAuthenticated = false;
+  const handleSignOut = () => {
+    signOut();
+    router.replace('/');
+  };
 
   return (
     <header className="border-b bg-white">
@@ -32,27 +40,29 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
 
-          {isAuthenticated ? (
-            <>
-              <Button asChild size="sm" variant="ghost">
-                <Link href="/history">{t('history')}</Link>
-              </Button>
+          {isAuthReady ? (
+            isAuthenticated ? (
+              <>
+                <Button asChild size="sm" variant="ghost">
+                  <Link href="/history">{t('history')}</Link>
+                </Button>
 
-              <Button size="sm" variant="outline">
-                {t('signOut')}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button asChild size="sm" variant="ghost">
-                <Link href="/sign-in">{t('signIn')}</Link>
-              </Button>
+                <Button size="sm" variant="outline" onClick={handleSignOut}>
+                  {t('signOut')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button asChild size="sm" variant="ghost">
+                  <Link href="/sign-in">{t('signIn')}</Link>
+                </Button>
 
-              <Button asChild size="sm">
-                <Link href="/sign-up">{t('signUp')}</Link>
-              </Button>
-            </>
-          )}
+                <Button asChild size="sm">
+                  <Link href="/sign-up">{t('signUp')}</Link>
+                </Button>
+              </>
+            )
+          ) : null}
         </div>
       </div>
     </header>

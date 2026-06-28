@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 
+import { AuthProvider } from '../components/AuthProvider';
 import Header from '../components/Header';
 
 const geistSans = Geist({
@@ -30,8 +31,10 @@ export default function RootLayout({
     <html className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} lang="en">
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <Header />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <AuthProvider>
+            <Header />
+            <main className="flex flex-1 flex-col">{children}</main>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>
