@@ -1,5 +1,32 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "Auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "Min 8 chars, letter, digit, special",
+    "signInTitle": "Welcome back",
+    "signUpTitle": "Create account",
+    "signInButton": "Sign In",
+    "signUpButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "errors": {
+      "invalidEmail": "Enter a valid email address",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordLetter": "Password must contain at least one letter",
+      "passwordDigit": "Password must contain at least one digit",
+      "passwordSpecial": "Password must contain at least one special character",
+      "passwordMatch": "Passwords do not match",
+      "invalidCredentials": "Invalid email or password",
+      "emailTaken": "This email is already registered",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

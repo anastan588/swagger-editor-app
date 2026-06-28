@@ -1,5 +1,32 @@
 {
   "HomePage": {
     "title": "Привет, Мир"
+  },
+  "Auth": {
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "signOut": "Выйти",
+    "email": "Email",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "Мин 8 символов, буква, цифра, спецсимвол",
+    "signInTitle": "С возвращением",
+    "signUpTitle": "Создать аккаунт",
+    "signInButton": "Войти",
+    "signUpButton": "Создать аккаунт",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "errors": {
+      "invalidEmail": "Введите корректный email",
+      "passwordMin": "Пароль должен быть не менее 8 символов",
+      "passwordLetter": "Пароль должен содержать хотя бы одну букву",
+      "passwordDigit": "Пароль должен содержать хотя бы одну цифру",
+      "passwordSpecial": "Пароль должен содержать хотя бы один спецсимвол",
+      "passwordMatch": "Пароли не совпадают",
+      "invalidCredentials": "Неверный email или пароль",
+      "emailTaken": "Этот email уже зарегистрирован",
+      "generic": "Что-то пошло не так. Попробуйте снова."
+    }
   }
 }
