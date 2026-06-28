@@ -4,14 +4,18 @@ import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/app/components/useAuth';
 import { Button } from '@/components/ui/button';
-import { Link, useRouter } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 
 import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
   const t = useTranslations('Header');
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, isAuthReady, signOut } = useAuth();
+
+  const isEditorPage = pathname === '/';
+  const isAboutPage = pathname ==='/about';
 
   const handleSignOut = () => {
     signOut();
@@ -27,11 +31,11 @@ const Header = () => {
           </Link>
 
           <nav className="flex items-center gap-2">
-            <Button asChild size="sm" variant="ghost">
+            <Button asChild size="sm" variant={isEditorPage ? 'secondary' : 'ghost'}>
               <Link href="/">{t('editor')}</Link>
             </Button>
 
-            <Button asChild size="sm" variant="ghost">
+            <Button asChild size="sm" variant={isAboutPage ? 'secondary' : 'ghost'}>
               <Link href="/about">{t('about')}</Link>
             </Button>
           </nav>
