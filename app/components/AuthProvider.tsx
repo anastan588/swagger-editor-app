@@ -11,7 +11,7 @@ type AuthContextValue = {
   signOut: () => void;
 };
 
-const AuthContext = createContext<AuthContextValue | null>(null);
+export const AuthContext = createContext<AuthContextValue | null>(null);
 
 const isTokenValid = (token: string | null) => {
   if (!token) {
@@ -72,14 +72,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return <AuthContext value={value}>{children}</AuthContext>;
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error('useAuth must be used inside AuthProvider');
-  }
-
-  return context;
 };

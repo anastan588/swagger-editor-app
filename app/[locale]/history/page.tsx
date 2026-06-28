@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 
-import { useAuth } from '@/app/components/AuthProvider';
+import { useAuth } from '@/app/components/useAuth';
 import { useRouter } from '@/i18n/navigation';
 
 const HistoryPage = () => {

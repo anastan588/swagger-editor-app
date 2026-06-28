@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const teamMembers = [
   {
     name: 'Anastasiya Andronava',
@@ -43,7 +45,13 @@ const AboutPage = () => {
         <section className="h-full space-y-4 rounded-lg border bg-white p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="flex h-20 w-28 shrink-0 items-center justify-center rounded-md border bg-zinc-50 p-3">
-              <img className="max-h-full max-w-full object-contain" src="/course-logo.png" alt="RS School" />
+              <Image
+                alt="RS School"
+                className="max-h-full max-w-full object-contain"
+                height={80}
+                src="/course-logo.png"
+                width={112}
+              />
             </div>
 
             <div className="space-y-2">
@@ -80,7 +88,7 @@ const AboutPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              <img className="size-5 shrink-0" src="/github.svg" alt="" />
+              <Image alt="icon" className="size-5 shrink-0" height={20} src="/github.svg" width={20} />
               Project repository
             </a>
 
@@ -101,16 +109,16 @@ const AboutPage = () => {
 
         <div className="grid gap-4 md:grid-cols-3">
           {teamMembers.map((member) => (
-            <article className="rounded-lg border bg-white p-5" key={member.github}>
+            <article key={member.github} className="rounded-lg border bg-white p-5">
               <div className="mb-4 flex justify-center">
-                <img className="size-28 rounded-full border object-cover" src={member.imageSrc} alt={member.alt} />
+                <Image alt={member.alt} className="size-28 rounded-full border object-cover" src={member.imageSrc} />
               </div>
               <h3 className="font-semibold">{member.name}</h3>
 
               <p className="mt-1 text-sm text-muted-foreground">{member.role}</p>
 
               <div className="mt-4 flex items-center gap-2">
-                <img className="size-5 shrink-0" src="/github.svg" alt="" />
+                <Image alt="icon" className="size-5 shrink-0" src="/github.svg" />
 
                 <a
                   className="text-sm font-medium text-primary hover:underline"
@@ -131,7 +139,7 @@ const AboutPage = () => {
 
         <ul className="flex flex-wrap gap-2">
           {technologies.map((technology) => (
-            <li className="rounded-md border bg-white px-3 py-1 text-sm" key={technology}>
+            <li key={technology} className="rounded-md border bg-white px-3 py-1 text-sm">
               {technology}
             </li>
           ))}
