@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useMemo, useState } from 'react';
 
 const AUTH_TOKEN_KEY = 'authToken';
 
