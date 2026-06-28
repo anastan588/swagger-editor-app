@@ -15,7 +15,7 @@ const Header = () => {
   const { isAuthenticated, isAuthReady, signOut } = useAuth();
 
   const isEditorPage = pathname === '/';
-  const isAboutPage = pathname ==='/about';
+  const isAboutPage = pathname === '/about';
 
   const handleSignOut = () => {
     signOut();
