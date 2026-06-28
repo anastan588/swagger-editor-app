@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/app/components/useAuth';
@@ -13,9 +14,24 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, isAuthReady, signOut } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const isEditorPage = pathname === '/';
   const isAboutPage = pathname === '/about';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleSignOut = () => {
     signOut();
@@ -23,7 +39,9 @@ const Header = () => {
   };
 
   return (
-    <header className="border-b bg-white">
+    <header
+      className={`sticky top-0 z-50 border-b transition-colors ${isScrolled ? 'bg-zinc-100 shadow-sm' : 'bg-white'}`}
+    >
       <div className="mx-auto flex min-h-14 w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-6">
           <Link className="text-base font-semibold" href="/">
