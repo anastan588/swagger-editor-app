@@ -1,5 +1,41 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "Header": {
+    "logo": "Swagger Editor",
+    "editor": "Editor",
+    "about": "About",
+    "history": "History",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out"
+  },
+  "Footer": {
+    "created": "Created in 2026 for RS School React Course",
+    "about": "About Swagger Editor App"
+  },
+  "AboutPage": {
+    "title": "About Swagger Editor App",
+    "description": "Swagger Editor App is a final project built for the RS School React course. The application is designed for working with Swagger and OpenAPI specifications, including editing, viewing, and managing request history.",
+    "course": {
+      "title": "RS School Course",
+      "description": "RS School is a free community-based education program focused on modern web development. This project was created as part of the React course final task.",
+      "link": "RS School website"
+    },
+    "resources": {
+      "title": "Project Resources",
+      "description": "Explore the project source code and the original RS School final task requirements.",
+      "repository": "Project repository",
+      "task": "Final task description"
+    },
+    "team": {
+      "title": "Development Team",
+      "roles": {
+        "teamLead": "Team Lead",
+        "developer": "Developer"
+      }
+    },
+    "technologies": "Technologies"
   }
 }

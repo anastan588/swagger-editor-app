@@ -1,5 +1,41 @@
 {
   "HomePage": {
-    "title": "Привет, Мир"
+    "title": "Привет, мир"
+  },
+  "Header": {
+    "logo": "Swagger Editor",
+    "editor": "Редактор",
+    "about": "О проекте",
+    "history": "История",
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "signOut": "Выйти"
+  },
+  "Footer": {
+    "created": "Создано в 2026 году для курса RS School React",
+    "about": "О Swagger Editor App"
+  },
+  "AboutPage": {
+    "title": "О Swagger Editor App",
+    "description": "Swagger Editor App — финальный проект курса RS School React. Приложение предназначено для работы со спецификациями Swagger и OpenAPI: редактирования, просмотра и управления историей запросов.",
+    "course": {
+      "title": "Курс RS School",
+      "description": "RS School — бесплатная образовательная программа сообщества, посвящённая современной веб-разработке. Этот проект создан в рамках финального задания курса React.",
+      "link": "Сайт RS School"
+    },
+    "resources": {
+      "title": "Ресурсы проекта",
+      "description": "Здесь можно посмотреть исходный код проекта и оригинальные требования финального задания RS School.",
+      "repository": "Репозиторий проекта",
+      "task": "Описание финального задания"
+    },
+    "team": {
+      "title": "Команда разработки",
+      "roles": {
+        "teamLead": "Тимлид",
+        "developer": "Разработчик"
+      }
+    },
+    "technologies": "Технологии"
   }
 }
