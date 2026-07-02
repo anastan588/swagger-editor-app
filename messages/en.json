@@ -26,7 +26,7 @@
       "passwordMatch": "Passwords do not match",
       "invalidCredentials": "Invalid email or password",
       "emailTaken": "This email is already registered",
-      "generic": "Something went wrong. Please try again."
+      "common": "Something went wrong. Please try again."
     }
   }
 }

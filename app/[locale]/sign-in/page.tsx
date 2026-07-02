@@ -1,0 +1,28 @@
+import { getLocale } from 'next-intl/server';
+
+import SignInForm from '@/components/auth/sign-in-form';
+import { redirect } from '@/i18n/navigation';
+import { createClient } from '@/lib/supabase/server';
+
+const SignInPage = async () => {
+  const supabase = await createClient();
+  const locale = await getLocale();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect({
+      href: '/',
+      locale: locale || 'en',
+    });
+  }
+
+  return (
+    <main className="flex flex-1 items-center justify-center">
+      <SignInForm />
+    </main>
+  );
+};
+
+export default SignInPage;
