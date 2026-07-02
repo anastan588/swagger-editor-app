@@ -1,8 +1,8 @@
 import { getLocale } from 'next-intl/server';
 
-import { SignUpForm } from '@/components/auth/sign-up-form';
+import { SignUpForm } from '@/app/components/auth/sign-up-form';
 import { redirect } from '@/i18n/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 
 const SignUpPage = async () => {
   const supabase = await createClient();

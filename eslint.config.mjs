@@ -105,6 +105,13 @@ const eslintConfig = defineConfig([
       'simple-import-sort/exports': 'error',
     },
   },
+  {
+    files: ['app/**/layout.tsx', 'app/**/page.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+      'react/function-component-definition': 'off',
+    },
+  },
 ]);
 
 export default eslintConfig;

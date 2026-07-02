@@ -1,6 +1,6 @@
 import { getLocale } from 'next-intl/server';
 
-import SignInForm from '@/components/auth/sign-in-form';
+import SignInForm from '@/app/components/auth/sign-in-form';
 import { redirect } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 

@@ -2,15 +2,50 @@
   "HomePage": {
     "title": "Hello world!"
   },
+  "Header": {
+    "logo": "Swagger Editor",
+    "editor": "Editor",
+    "about": "About",
+    "history": "History",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign Out"
+  },
+  "Footer": {
+    "created": "Created in 2026 for RS School React Course",
+    "about": "About Swagger Editor App"
+  },
+  "AboutPage": {
+    "title": "About Swagger Editor App",
+    "description": "Swagger Editor App is a final project built for the RS School React course. The application is designed for working with Swagger and OpenAPI specifications, including editing, viewing, and managing request history.",
+    "course": {
+      "title": "RS School Course",
+      "description": "RS School is a free community-based education program focused on modern web development. This project was created as part of the React course final task.",
+      "link": "RS School website"
+    },
+    "resources": {
+      "title": "Project Resources",
+      "description": "Explore the project source code and the original RS School final task requirements.",
+      "repository": "Project repository",
+      "task": "Final task description"
+    },
+    "team": {
+      "title": "Development Team",
+      "roles": {
+        "teamLead": "Team Lead",
+        "developer": "Developer"
+      }
+    },
+    "technologies": "Technologies"
+  },
   "Auth": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "signOut": "Sign Out",
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "emailPlaceholder": "you@example.com",
-    "passwordPlaceholder": "Min 8 chars, letter, digit, special",
+    "passwordPlaceholder": "Min length 8(letters, numbers, specials)",
     "signInTitle": "Welcome back",
     "signUpTitle": "Create account",
     "signInButton": "Sign In",
