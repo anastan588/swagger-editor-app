@@ -7,11 +7,9 @@ import { createClient } from '@/lib/supabase/server';
 const SignUpPage = async () => {
   const supabase = await createClient();
   const locale = await getLocale();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getClaims();
 
-  if (user) {
+  if (data?.claims) {
     redirect({
       href: '/',
       locale: locale || 'en',

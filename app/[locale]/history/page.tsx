@@ -9,15 +9,15 @@ import { useRouter } from '@/i18n/navigation';
 const HistoryPage = () => {
   const t = useTranslations('HistoryPage');
   const router = useRouter();
-  const { isAuthenticated, isAuthReady } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (isAuthReady && !isAuthenticated) {
+    if (!isAuthenticated) {
       router.replace('/');
     }
-  }, [isAuthenticated, isAuthReady, router]);
+  }, [isAuthenticated, router]);
 
-  if (!isAuthReady || !isAuthenticated) {
+  if (!isAuthenticated) {
     return null;
   }
 
