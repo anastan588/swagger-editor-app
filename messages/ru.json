@@ -65,6 +65,10 @@
     "EditorSkeleton": {
       "loadingTitle": "Инициализация рабочей области",
       "loadingDescription": "Восстановление ваших последних сохраненных данных конфигурации OpenAPI из локального хранилища..."
+    },
+    "CompilerErrors": {
+      "jsonToYamlFailed": "Не удалось преобразовать структуру JSON в формат YAML.",
+      "yamlToJsonFailed": "Неверная синтаксическая структура YAML."
     }
   }
 }
