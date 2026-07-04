@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 
 import { AuthProvider } from '../components/AuthProvider';
+import { ErrorToastProvider } from '../components/ErrorToastProvider';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
@@ -33,9 +34,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
           <AuthProvider>
-            <Header />
-            <main className="flex flex-1 flex-col">{children}</main>
-            <Footer />
+            <ErrorToastProvider>
+              <Header />
+              <main className="flex flex-1 flex-col">{children}</main>
+              <Footer />
+            </ErrorToastProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>
