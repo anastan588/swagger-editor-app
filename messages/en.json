@@ -46,5 +46,19 @@
       }
     },
     "technologies": "Technologies"
+  },
+  "EditorPage": {
+    "CodeEditor": {
+      "title": "Editor ({format})",
+      "filePickerDescription": "OpenAPI Specification Files",
+      "loadFileBtn": "Load File",
+      "saveSchemaBtn": "Save Schema",
+      "savedBtn": "Saved",
+      "switchToBtn": "Switch to {targetFormat}",
+      "textareaPlaceholder": "Paste, type, or load your OpenAPI/Swagger specification (JSON/YAML) here...",
+      "validSchemaMsg": "Valid OpenAPI Specification. Endpoints synced down into viewer.",
+      "invalidSchemaTitle": "Invalid Schema Specification Error:",
+      "emptySchemaMsg": "No schema provided or layout empty"
+    }
   }
 }

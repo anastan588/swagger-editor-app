@@ -46,5 +46,21 @@
       }
     },
     "technologies": "Технологии"
+  },
+  "EditorPage": {
+    "workspaceTitle": "Студия Проектирования API",
+    "workspaceSubtitle": "Проектируйте, валидируйте и просматривайте интерактивные спецификации OpenAPI в реальном времени.",
+    "CodeEditor": {
+      "title": "Редактор ({format})",
+      "filePickerDescription": "Файлы спецификаций OpenAPI",
+      "loadFileBtn": "Загрузить файл",
+      "saveSchemaBtn": "Сохранить схему",
+      "savedBtn": "Сохранено",
+      "switchToBtn": "Перейти на {targetFormat}",
+      "textareaPlaceholder": "Вставьте, введите или загрузите вашу спецификацию OpenAPI/Swagger (JSON/YAML) здесь...",
+      "validSchemaMsg": "Валидная спецификация OpenAPI. Эндпоинты синхронизированы с просмотрщиком.",
+      "invalidSchemaTitle": "Ошибка валидации спецификации схемы:",
+      "emptySchemaMsg": "Схема не предоставлена или разметка пуста"
+    }
   }
 }

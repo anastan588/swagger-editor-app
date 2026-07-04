@@ -2,9 +2,11 @@
 
 import { useEffect } from 'react';
 import { AlertCircle, Check, CheckCircle, FileJson, Layers, Save, Upload } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-import { EditorSkeleton } from '@/app/components/EditorSkeleton';
 import { useSchema } from '@/app/context/SchemaContext';
+
+import { EditorSkeleton } from './EditorSkeleton';
 
 interface ExtendedWindow extends Window {
   showOpenFilePicker?: (options?: {
@@ -15,6 +17,7 @@ interface ExtendedWindow extends Window {
 }
 
 export const CodeEditor = () => {
+  const t = useTranslations('EditorPage.CodeEditor');
   const { schema, setSchema, format, toggleFormat, isValid, isSaved, isReady, errors, saveSchema } = useSchema();
 
   const safeErrors = Array.isArray(errors) ? errors : [String(errors)];
@@ -26,7 +29,7 @@ export const CodeEditor = () => {
         const [fileHandle] = await currentWindow.showOpenFilePicker({
           types: [
             {
-              description: 'OpenAPI Specification Files',
+              description: t('filePickerDescription'),
               accept: {
                 'application/json': ['.json'],
                 'text/yaml': ['.yaml', '.yml'],
@@ -98,7 +101,9 @@ export const CodeEditor = () => {
           ) : (
             <Layers className="text-black dark:text-white" size={16} />
           )}
-          <span className="font-bold text-xs tracking-wider uppercase">Editor ({format})</span>
+          <span className="font-bold text-xs tracking-wider uppercase">
+            {t('title', { format: format.toUpperCase() })}
+          </span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -108,7 +113,7 @@ export const CodeEditor = () => {
             onClick={handleFileLoadClick}
           >
             <Upload size={14} />
-            Load File
+            {t('loadFileBtn')}
           </button>
 
           <button
@@ -124,12 +129,12 @@ export const CodeEditor = () => {
             {isSaved ? (
               <>
                 <Check size={14} />
-                Saved
+                {t('savedBtn')}
               </>
             ) : (
               <>
                 <Save size={14} />
-                Save Schema
+                {t('saveSchemaBtn')}
               </>
             )}
           </button>
@@ -144,7 +149,7 @@ export const CodeEditor = () => {
             type="button"
             onClick={toggleFormat}
           >
-            Switch to {format === 'json' ? 'YAML' : 'JSON'}
+            {t('switchToBtn', { targetFormat: format === 'json' ? 'YAML' : 'JSON' })}
           </button>
         </div>
       </div>
@@ -152,7 +157,7 @@ export const CodeEditor = () => {
       <div className="flex-1 relative w-full min-h-0">
         <textarea
           className="absolute inset-0 w-full h-full p-4 bg-white dark:bg-black font-mono text-sm resize-none focus:outline-none text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 dark:placeholder-neutral-600 transition-colors duration-200 overflow-y-auto"
-          placeholder="Paste, type, or load your OpenAPI/Swagger specification (JSON/YAML) here..."
+          placeholder={t('textareaPlaceholder')}
           value={schema}
           onChange={(e) => setSchema(e.target.value)}
         />
@@ -168,22 +173,20 @@ export const CodeEditor = () => {
         {isValid ? (
           <>
             <CheckCircle className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" size={16} />
-            <div className="font-medium tracking-wide">
-              Valid OpenAPI Specification. Endpoints synced down into viewer.
-            </div>
+            <div className="font-medium tracking-wide">{t('validSchemaMsg')}</div>
           </>
         ) : (
           <>
             <AlertCircle className="mt-0.5 shrink-0 text-rose-600 dark:text-rose-400" size={16} />
             <div className="flex-1">
               <span className="font-extrabold block mb-1.5 uppercase tracking-wider text-[10px] text-rose-700 dark:text-rose-400">
-                Invalid Schema Specification Error:
+                {t('invalidSchemaTitle')}
               </span>
               <ul className="list-disc list-inside space-y-1 font-mono text-rose-800 dark:text-rose-300/90">
                 {safeErrors.length > 0 && safeErrors[0] !== '' ? (
                   safeErrors.map((err: string, idx: number) => <li key={idx}>{err}</li>)
                 ) : (
-                  <li>No schema provided or layout empty</li>
+                  <li>{t('emptySchemaMsg')}</li>
                 )}
               </ul>
             </div>
