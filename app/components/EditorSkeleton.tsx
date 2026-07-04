@@ -1,8 +1,11 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 export const EditorSkeleton: React.FC = () => {
+  const t = useTranslations('EditorPage.EditorSkeleton');
+
   return (
     <div className="flex flex-col h-full w-full bg-white dark:bg-zinc-950 border border-neutral-200 dark:border-neutral-800 rounded-sm overflow-hidden shadow-sm animate-pulse min-h-0 relative">
       <div className="h-11 bg-neutral-50 dark:bg-zinc-900 border-b border-neutral-200 dark:border-neutral-800 w-full" />
@@ -10,10 +13,10 @@ export const EditorSkeleton: React.FC = () => {
         <div className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-200 dark:border-neutral-800 border-t-black dark:border-t-white" />
         <div className="space-y-1">
           <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-            Initializing Workspace
+            {t('loadingTitle')}
           </p>
           <p className="text-[11px] text-neutral-400 dark:text-neutral-600 font-light max-w-[240px] leading-relaxed">
-            Restoring your last saved OpenAPI configuration data from local storage...
+            {t('loadingDescription')}
           </p>
         </div>
       </div>
