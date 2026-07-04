@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import LanguageSwitcher from '@/app/components/LanguageSwitcher';
 import { useAuth } from '@/app/components/useAuth';
 import { Button } from '@/components/ui/button';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
-
-import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
   const t = useTranslations('Header');
@@ -50,7 +49,7 @@ const Header = () => {
 
           <nav className="flex items-center gap-2">
             <Button asChild size="sm" variant={isEditorPage ? 'secondary' : 'ghost'}>
-              <Link href="/">{t('editor')}</Link>
+              <Link href="/editor">{t('editor')}</Link>
             </Button>
 
             <Button asChild size="sm" variant={isAboutPage ? 'secondary' : 'ghost'}>

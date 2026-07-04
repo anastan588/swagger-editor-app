@@ -1,6 +1,15 @@
 {
   "HomePage": {
-    "title": "Hello world!"
+    "welcomeBack": "Welcome back.",
+    "welcome": "Hello.",
+    "authSubtitle": "We missed you. Explore your personal dashboard.",
+    "guestSubtitle": "Discover a minimal space designed for productivity.",
+    "dashboardBtn": "Go to Dashboard",
+    "getStartedBtn": "Get Started",
+    "workspaceTitle": "Swagger Workspace",
+    "workspaceAuthDesc": "Access your full design history and saved definitions.",
+    "workspaceGuestDesc": "Login or create an account to persist your API design history.",
+    "historyLink": "View History"
   },
   "Header": {
     "logo": "Swagger Editor",
