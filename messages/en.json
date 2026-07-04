@@ -59,6 +59,10 @@
       "validSchemaMsg": "Valid OpenAPI Specification. Endpoints synced down into viewer.",
       "invalidSchemaTitle": "Invalid Schema Specification Error:",
       "emptySchemaMsg": "No schema provided or layout empty"
-    }
+    },
+    "EditorSkeleton": {
+      "loadingTitle": "Initializing Workspace",
+      "loadingDescription": "Restoring your last saved OpenAPI configuration data from local storage..."
+    },
   }
 }
