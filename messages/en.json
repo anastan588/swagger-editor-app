@@ -9,7 +9,7 @@
     "history": "History",
     "signIn": "Sign in",
     "signUp": "Sign up",
-    "signOut": "Sign out"
+    "signOut": "Sign Out"
   },
   "Footer": {
     "created": "Created in 2026 for RS School React Course",
@@ -37,5 +37,31 @@
       }
     },
     "technologies": "Technologies"
+  },
+  "Auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "Min length 8(letters, numbers, specials)",
+    "signInTitle": "Welcome back",
+    "signUpTitle": "Create account",
+    "signInButton": "Sign In",
+    "signUpButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "errors": {
+      "invalidEmail": "Enter a valid email address",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordLetter": "Password must contain at least one letter",
+      "passwordDigit": "Password must contain at least one digit",
+      "passwordSpecial": "Password must contain at least one special character",
+      "passwordMatch": "Passwords do not match",
+      "invalidCredentials": "Invalid email or password",
+      "emailTaken": "This email is already registered",
+      "common": "Something went wrong. Please try again."
+    }
   }
 }

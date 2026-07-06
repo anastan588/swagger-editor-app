@@ -13,7 +13,7 @@ const Header = () => {
   const t = useTranslations('Header');
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isAuthReady, signOut } = useAuth();
+  const { isAuthenticated, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const isEditorPage = pathname === '/';
@@ -33,9 +33,10 @@ const Header = () => {
     };
   }, []);
 
-  const handleSignOut = () => {
-    signOut();
+  const handleSignOut = async () => {
+    await signOut();
     router.replace('/');
+    router.refresh();
   };
 
   return (
@@ -62,29 +63,27 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
 
-          {isAuthReady ? (
-            isAuthenticated ? (
-              <>
-                <Button asChild size="sm" variant="ghost">
-                  <Link href="/history">{t('history')}</Link>
-                </Button>
+          {isAuthenticated ? (
+            <>
+              <Button asChild size="sm" variant="ghost">
+                <Link href="/history">{t('history')}</Link>
+              </Button>
 
-                <Button size="sm" variant="outline" onClick={handleSignOut}>
-                  {t('signOut')}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button asChild size="sm" variant="ghost">
-                  <Link href="/sign-in">{t('signIn')}</Link>
-                </Button>
+              <Button size="sm" variant="outline" onClick={handleSignOut}>
+                {t('signOut')}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild size="sm" variant="ghost">
+                <Link href="/sign-in">{t('signIn')}</Link>
+              </Button>
 
-                <Button asChild size="sm">
-                  <Link href="/sign-up">{t('signUp')}</Link>
-                </Button>
-              </>
-            )
-          ) : null}
+              <Button asChild size="sm">
+                <Link href="/sign-up">{t('signUp')}</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

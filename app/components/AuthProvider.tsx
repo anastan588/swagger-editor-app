@@ -1,74 +1,46 @@
 'use client';
 
-import { createContext, ReactNode, useMemo, useState } from 'react';
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
 
-const AUTH_TOKEN_KEY = 'authToken';
+import { createClient } from '@/lib/supabase/client';
 
-type AuthContextValue = {
+interface AuthContextValue {
   isAuthenticated: boolean;
-  isAuthReady: boolean;
-  setToken: (token: string) => void;
-  signOut: () => void;
-};
+  signOut: () => Promise<void>;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+  initialIsAuthenticated: boolean;
+}
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
-const isTokenValid = (token: string | null) => {
-  if (!token) {
-    return false;
-  }
+export const AuthProvider = ({ children, initialIsAuthenticated }: AuthProviderProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
 
-  try {
-    const [, payload] = token.split('.');
+  useEffect(() => {
+    const supabase = createClient();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
 
-    if (!payload) return false;
+    return () => subscription.unsubscribe();
+  }, []);
 
-    const decodedPayload = JSON.parse(atob(payload)) as {
-      exp?: number;
-    };
-
-    if (!decodedPayload.exp) return false;
-
-    return decodedPayload.exp * 1000 > Date.now();
-  } catch {
-    return false;
-  }
-};
-
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    if (typeof window === 'undefined') return false;
-
-    const token = localStorage.getItem(AUTH_TOKEN_KEY);
-    const hasValidToken = isTokenValid(token);
-
-    if (!hasValidToken) {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
-    }
-
-    return hasValidToken;
-  });
-
-  const isAuthReady = true;
-
-  const setToken = (token: string) => {
-    localStorage.setItem(AUTH_TOKEN_KEY, token);
-    setIsAuthenticated(isTokenValid(token));
-  };
-
-  const signOut = () => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
-    setIsAuthenticated(false);
+  const signOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
   };
 
   const value = useMemo(
     () => ({
       isAuthenticated,
-      isAuthReady,
-      setToken,
       signOut,
     }),
-    [isAuthenticated, isAuthReady],
+    [isAuthenticated],
   );
 
   return <AuthContext value={value}>{children}</AuthContext>;
