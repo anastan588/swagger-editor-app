@@ -5,6 +5,16 @@ import { describe, expect, it, vi } from 'vitest';
 
 import RootLayout from '@/app/[locale]/layout';
 
+const mocks = vi.hoisted(() => ({
+  getClaims: vi.fn().mockResolvedValue({ data: { claims: null } }),
+}));
+
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: async () => ({
+    auth: { getClaims: mocks.getClaims },
+  }),
+}));
+
 vi.mock('next/font/google', () => ({
   Geist: () => ({ variable: '--font-geist-sans' }),
   Geist_Mono: () => ({ variable: '--font-geist-mono' }),
@@ -38,11 +48,11 @@ vi.mock('@/app/context/AuthProvider', () => ({
 }));
 
 describe('RootLayout Component', () => {
-  it('renders correctly with global providers, header, footer and main tree wrapper', () => {
+  it('renders correctly with global providers, header, footer and main tree wrapper', async () => {
     render(
-      <RootLayout>
-        <div data-testid="test-child">Application Content</div>
-      </RootLayout>,
+      await RootLayout({
+        children: <div data-testid="test-child">Application Content</div>,
+      }),
     );
 
     const authProvider = screen.getByTestId('auth-provider');
@@ -55,7 +65,7 @@ describe('RootLayout Component', () => {
 
     const mainElement = screen.getByRole('main');
     expect(mainElement).toBeInTheDocument();
-    expect(mainElement).toHaveClass('flex', 'flex-col', 'flex-1', 'w-full', 'min-h-0', 'overflow-hidden');
+    expect(mainElement).toHaveClass('flex-1', 'w-full');
 
     const childContent = screen.getByTestId('test-child');
     expect(childContent).toBeInTheDocument();

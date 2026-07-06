@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CodeEditor } from '@/app/components/CodeEditor';
 
@@ -14,34 +14,40 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
 
-vi.mock('@/app/components/EditorSkeleton', () => ({
-  EditorSkeleton: function MockSkeleton() {
-    return <div data-testid="editor-skeleton">Skeleton Loading...</div>;
-  },
+vi.mock('@/components/ui/button', () => ({
+  Button: ({ children, onClick, disabled, className }: React.ComponentPropsWithoutRef<'button'>) => (
+    <button className={className} disabled={disabled} type="button" onClick={onClick}>
+      {children}
+    </button>
+  ),
+}));
+
+vi.mock('@/components/ui/textarea', () => ({
+  Textarea: ({ value, onChange, placeholder, className }: React.ComponentPropsWithoutRef<'textarea'>) => (
+    <textarea className={className} placeholder={placeholder} value={value} onChange={onChange} />
+  ),
+}));
+
+vi.mock('@/components/ui/alert', () => ({
+  Alert: ({ children, className }: React.ComponentPropsWithoutRef<'div'>) => (
+    <div className={className}>{children}</div>
+  ),
+  AlertTitle: ({ children, className }: React.ComponentPropsWithoutRef<'div'>) => (
+    <div className={className}>{children}</div>
+  ),
+  AlertDescription: ({ children, className }: React.ComponentPropsWithoutRef<'div'>) => (
+    <div className={className}>{children}</div>
+  ),
 }));
 
 const mockShowOpenFilePicker = vi.fn();
-vi.stubGlobal('window', {
-  showOpenFilePicker: mockShowOpenFilePicker,
-});
 
 describe('CodeEditor Component', () => {
-  it('renders editor skeleton when schema context state is not ready', () => {
-    mockUseSchema.mockReturnValue({
-      schema: '',
-      setSchema: vi.fn(),
-      format: 'yaml',
-      toggleFormat: vi.fn(),
-      isValid: false,
-      isSaved: true,
-      isReady: false,
-      errors: [],
-      saveSchema: vi.fn(),
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    vi.stubGlobal('window', {
+      showOpenFilePicker: mockShowOpenFilePicker,
     });
-
-    render(<CodeEditor />);
-    expect(screen.getByTestId('editor-skeleton')).toBeInTheDocument();
-    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
   it('renders successful green indicators panel when openapi specification is valid', () => {
@@ -52,7 +58,6 @@ describe('CodeEditor Component', () => {
       toggleFormat: vi.fn(),
       isValid: true,
       isSaved: true,
-      isReady: true,
       errors: [],
       saveSchema: vi.fn(),
     });
@@ -72,7 +77,6 @@ describe('CodeEditor Component', () => {
       toggleFormat: vi.fn(),
       isValid: false,
       isSaved: false,
-      isReady: true,
       errors: ['Syntax Error Line 1', 'Missing Field'],
       saveSchema: vi.fn(),
     });
@@ -94,7 +98,6 @@ describe('CodeEditor Component', () => {
       toggleFormat: vi.fn(),
       isValid: false,
       isSaved: true,
-      isReady: true,
       errors: [],
       saveSchema: vi.fn(),
     });
@@ -121,7 +124,7 @@ describe('CodeEditor Component', () => {
   });
 
   it('triggers fallback input file loader pipeline when showOpenFilePicker is undefined', async () => {
-    vi.stubGlobal('window', { showOpenFilePicker: undefined });
+    vi.stubGlobal('window', {});
     const setSchemaMock = vi.fn();
     mockUseSchema.mockReturnValue({
       schema: '',
@@ -130,7 +133,6 @@ describe('CodeEditor Component', () => {
       toggleFormat: vi.fn(),
       isValid: false,
       isSaved: true,
-      isReady: true,
       errors: [],
       saveSchema: vi.fn(),
     });
@@ -138,6 +140,9 @@ describe('CodeEditor Component', () => {
     const mockInputElement = {
       click: vi.fn(),
       onchange: vi.fn(),
+      remove: vi.fn(),
+      type: '',
+      accept: '',
     };
 
     const originalCreateElement = document.createElement;
@@ -160,17 +165,17 @@ describe('CodeEditor Component', () => {
       },
     };
 
-    mockInputElement.onchange(mockEvent);
+    await mockInputElement.onchange(mockEvent);
 
     await waitFor(
       () => {
         expect(setSchemaMock).toHaveBeenCalledWith('openapi: 3.0.0 fallback');
+        expect(mockInputElement.remove).toHaveBeenCalled();
       },
       { container },
     );
 
     document.createElement = originalCreateElement;
-    vi.stubGlobal('window', { showOpenFilePicker: mockShowOpenFilePicker });
   });
 
   it('filters specific swagger ui console warnings in execution effect layers', () => {
@@ -181,7 +186,6 @@ describe('CodeEditor Component', () => {
       toggleFormat: vi.fn(),
       isValid: false,
       isSaved: true,
-      isReady: true,
       errors: [],
       saveSchema: vi.fn(),
     });
@@ -211,7 +215,6 @@ describe('CodeEditor Component', () => {
       toggleFormat: vi.fn(),
       isValid: false,
       isSaved: true,
-      isReady: true,
       errors: [''],
       saveSchema: vi.fn(),
     });

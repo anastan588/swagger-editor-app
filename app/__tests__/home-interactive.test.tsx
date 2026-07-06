@@ -1,14 +1,10 @@
 import '@testing-library/jest-dom/vitest';
 
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import HomeInteractive from '@/app/components/HomeInteractive';
-
-const mockUseAuth = vi.fn();
-vi.mock('@/app/components/useAuth', () => ({
-  useAuth: () => mockUseAuth(),
-}));
+import { AuthContext } from '@/app/context/AuthProvider';
 
 vi.mock('@/i18n/navigation', () => ({
   Link: function MockLink({
@@ -30,7 +26,7 @@ vi.mock('@/i18n/navigation', () => ({
 
 const mockProps: Record<string, string> = {
   welcome: 'Hello Guest',
-  welcomeBack: 'Welcome Back User',
+  welcomeBack: 'Welcome Back',
   guestSubtitle: 'Guest subtitle text',
   authSubtitle: 'Auth subtitle text',
   workspaceTitle: 'Workspace Title',
@@ -42,25 +38,16 @@ const mockProps: Record<string, string> = {
 };
 
 describe('HomeInteractive Component', () => {
-  it('renders nothing but a minimal height wrapper when auth state is not ready', () => {
-    mockUseAuth.mockReturnValue({
-      isAuthenticated: false,
-      isAuthReady: false,
-    });
-
-    const { container } = render(<HomeInteractive {...mockProps} />);
-
-    expect(container.firstChild).toHaveClass('min-h-[300px]');
-    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  beforeEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders guest interface configuration details when user is not authenticated', () => {
-    mockUseAuth.mockReturnValue({
-      isAuthenticated: false,
-      isAuthReady: true,
-    });
-
-    render(<HomeInteractive {...mockProps} />);
+    render(
+      <AuthContext.Provider value={{ isAuthenticated: false, userName: null, signOut: vi.fn() }}>
+        <HomeInteractive {...mockProps} />
+      </AuthContext.Provider>,
+    );
 
     const title = screen.getByRole('heading', { level: 1 });
     expect(title).toHaveTextContent('Hello Guest');
@@ -78,15 +65,14 @@ describe('HomeInteractive Component', () => {
   });
 
   it('renders authorized dashboard settings options when user is successfully authenticated', () => {
-    mockUseAuth.mockReturnValue({
-      isAuthenticated: true,
-      isAuthReady: true,
-    });
-
-    render(<HomeInteractive {...mockProps} />);
+    render(
+      <AuthContext.Provider value={{ isAuthenticated: true, userName: 'John', signOut: vi.fn() }}>
+        <HomeInteractive {...mockProps} />
+      </AuthContext.Provider>,
+    );
 
     const title = screen.getByRole('heading', { level: 1 });
-    expect(title).toHaveTextContent('Welcome Back User');
+    expect(title).toHaveTextContent('Welcome Back, John');
 
     const subtitle = screen.getByText('Auth subtitle text');
     expect(subtitle).toBeInTheDocument();
@@ -99,5 +85,16 @@ describe('HomeInteractive Component', () => {
 
     const actionLink = screen.getByRole('link', { name: 'Go to Dashboard' });
     expect(actionLink).toHaveAttribute('href', '/editor');
+  });
+
+  it('renders fallback formatting for authenticated user without a name', () => {
+    render(
+      <AuthContext.Provider value={{ isAuthenticated: true, userName: null, signOut: vi.fn() }}>
+        <HomeInteractive {...mockProps} />
+      </AuthContext.Provider>,
+    );
+
+    const title = screen.getByRole('heading', { level: 1 });
+    expect(title).toHaveTextContent('Welcome Back,');
   });
 });

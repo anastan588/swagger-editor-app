@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import SignInPage from '@/app/[locale]/sign-in/page';
+import SignUpPage from '@/app/[locale]/sign-up/page';
 
 const mocks = vi.hoisted(() => ({
-  getUser: vi.fn(),
+  getClaims: vi.fn(),
   redirect: vi.fn(),
 }));
 
 vi.mock('@/lib/supabase/server', () => ({
-  createClient: async () => ({
-    auth: { getUser: mocks.getUser },
+  createClient: () => ({
+    auth: { getClaims: mocks.getClaims },
   }),
 }));
 
@@ -22,24 +22,29 @@ vi.mock('@/i18n/navigation', () => ({
   redirect: mocks.redirect,
 }));
 
-vi.mock('@/app/components/auth/sign-in-form', () => ({
-  default: () => <div data-testid="sign-in-form" />,
+vi.mock('@/app/components/auth/sign-up-form', () => ({
+  SignUpForm: () => <div data-testid="sign-up-form" />,
 }));
 
-describe('SignInPage', () => {
-  it('renders sign-in form for unauthenticated user', async () => {
-    mocks.getUser.mockResolvedValue({ data: { user: null } });
+describe('SignUpPage', () => {
+  beforeEach(() => {
+    mocks.getClaims.mockClear();
+    mocks.redirect.mockClear();
+  });
 
-    render(await SignInPage());
+  it('renders sign-up form for unauthenticated user', async () => {
+    mocks.getClaims.mockResolvedValue({ data: { claims: null } });
 
-    expect(screen.getByTestId('sign-in-form')).toBeInTheDocument();
+    render(await SignUpPage());
+
+    expect(screen.getByTestId('sign-up-form')).toBeInTheDocument();
     expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
   it('redirects authenticated user to home page', async () => {
-    mocks.getUser.mockResolvedValue({ data: { user: { id: '123' } } });
+    mocks.getClaims.mockResolvedValue({ data: { claims: { sub: '123' } } });
 
-    render(await SignInPage());
+    render(await SignUpPage());
 
     expect(mocks.redirect).toHaveBeenCalledWith({ href: '/', locale: 'en' });
   });

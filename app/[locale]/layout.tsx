@@ -32,14 +32,14 @@ export default async function RootLayout({
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const isAuthenticated = !!data?.claims;
-  console.log(isAuthenticated);
+
   return (
-    <html className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} lang="en">
-      <body className="min-h-full flex flex-col">
+    <html className={`${geistSans.variable} ${geistMono.variable}`} lang="en">
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
         <NextIntlClientProvider>
           <AuthProvider initialIsAuthenticated={isAuthenticated}>
             <Header />
-            <main className="flex flex-col flex-1 w-full min-h-0 overflow-hidden">{children}</main>
+            <main className="flex-1 w-full">{children}</main>
             <Footer />
           </AuthProvider>
         </NextIntlClientProvider>

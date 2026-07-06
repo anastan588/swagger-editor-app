@@ -5,14 +5,13 @@ import { describe, expect, it, vi } from 'vitest';
 
 import Home from '@/app/[locale]/page';
 
-vi.mock('next/navigation', () => ({
+vi.mock('@/i18n/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),
     replace: vi.fn(),
     prefetch: vi.fn(),
   }),
   usePathname: () => '/',
-  useParams: () => ({ locale: 'en' }),
 }));
 
 vi.mock('next-intl', () => ({
@@ -29,13 +28,13 @@ vi.mock('@/app/components/HomeInteractive', () => ({
 }));
 
 describe('Home Component (SSR Page Layout)', () => {
-  it('renders the base layout structure and passes translations correctly', () => {
-    render(<Home />);
-    const mainElement = screen.getByRole('main');
-    expect(mainElement).toBeInTheDocument();
-    expect(mainElement).toHaveClass('max-w-3xl');
+  it('renders the base layout structure and passes translations correctly', async () => {
+    const { container } = render(await Home());
 
-    const decorativeLine = mainElement.querySelector('.mb-6');
+    const wrapper = container.querySelector('.max-w-3xl');
+    expect(wrapper).toBeInTheDocument();
+
+    const decorativeLine = container.querySelector('.mb-6');
     expect(decorativeLine).toBeInTheDocument();
     expect(decorativeLine).toHaveClass('bg-black', 'dark:bg-white');
 
