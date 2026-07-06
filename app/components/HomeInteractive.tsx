@@ -1,6 +1,8 @@
 'use client';
 
-import { useAuth } from '@/app/components/useAuth';
+import { useContext } from 'react';
+
+import { AuthContext } from '@/app/context/AuthProvider';
 import { Link } from '@/i18n/navigation';
 
 const HomeInteractive = ({
@@ -15,14 +17,14 @@ const HomeInteractive = ({
   dashboardBtn,
   getStartedBtn,
 }: Record<string, string>) => {
-  const { isAuthenticated, isAuthReady } = useAuth();
-
-  if (!isAuthReady) return <div className="min-h-[300px]" />;
+  const auth = useContext(AuthContext);
+  const isAuthenticated = auth?.isAuthenticated ?? false;
+  const userName = auth?.userName;
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl mb-4">
-        {isAuthenticated ? welcomeBack : welcome}
+      <h1 className="text-2xl font-extrabold tracking-tight sm:text-4xl mb-4">
+        {isAuthenticated ? `${welcomeBack}, ${userName || ''}` : welcome}
       </h1>
 
       <p className="text-base text-neutral-500 dark:text-neutral-400 max-w-md font-light leading-relaxed mb-8">

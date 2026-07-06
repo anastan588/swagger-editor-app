@@ -1,10 +1,10 @@
 {
   "HomePage": {
-    "welcomeBack": "С возвращением.",
+    "welcomeBack": "С возвращением",
     "welcome": "Приветствуем.",
     "authSubtitle": "Рады видеть вас снова. Ваш персональный дашборд готов к работе.",
     "guestSubtitle": "Откройте для себя минималистичное пространство для продуктивности.",
-    "dashboardBtn": "В личный кабинет",
+    "dashboardBtn": "В Swagger Editor",
     "getStartedBtn": "Начать работу",
     "workspaceTitle": "Рабочая область Swagger",
     "workspaceAuthDesc": "Доступ к полной истории проектирования и сохраненным спецификациям.",

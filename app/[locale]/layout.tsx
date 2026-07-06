@@ -4,11 +4,10 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 
-import { createClient } from '@/lib/supabase/server';
-
 import Footer from '@/app/components/Footer';
 import Header from '@/app/components/Header';
 import { AuthProvider } from '@/app/context/AuthProvider';
+import { createClient } from '@/lib/supabase/server';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,6 +32,7 @@ export default async function RootLayout({
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const isAuthenticated = !!data?.claims;
+  console.log(isAuthenticated);
   return (
     <html className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} lang="en">
       <body className="min-h-full flex flex-col">

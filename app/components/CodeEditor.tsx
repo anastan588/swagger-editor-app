@@ -5,8 +5,9 @@ import { AlertCircle, Check, CheckCircle, FileJson, Layers, Save, Upload } from 
 import { useTranslations } from 'next-intl';
 
 import { useSchema } from '@/app/context/SchemaContext';
-
-import { EditorSkeleton } from './EditorSkeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ExtendedWindow extends Window {
   showOpenFilePicker?: (options?: {
@@ -18,7 +19,7 @@ interface ExtendedWindow extends Window {
 
 export const CodeEditor = () => {
   const t = useTranslations('EditorPage.CodeEditor');
-  const { schema, setSchema, format, toggleFormat, isValid, isSaved, isReady, errors, saveSchema } = useSchema();
+  const { schema, setSchema, format, toggleFormat, isValid, isSaved, errors, saveSchema } = useSchema();
 
   const safeErrors = Array.isArray(errors) ? errors : [String(errors)];
 
@@ -55,6 +56,7 @@ export const CodeEditor = () => {
           if (!file) return;
           const text = await file.text();
           setSchema(text);
+          input.remove();
         };
         input.click();
       }
@@ -66,8 +68,6 @@ export const CodeEditor = () => {
   };
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
     const originalWarn = console.warn;
     const originalError = console.error;
 
@@ -79,8 +79,16 @@ export const CodeEditor = () => {
       originalWarn(msg, ...args);
     };
 
+    const filterError = (msg: unknown, ...args: unknown[]) => {
+      const msgStr = String(msg);
+      if (msgStr.includes('UNSAFE_componentWillReceiveProps') || msgStr.includes('ModelCollapse')) {
+        return;
+      }
+      originalError(msg, ...args);
+    };
+
     console.warn = filterWarning;
-    console.error = filterWarning;
+    console.error = filterError;
 
     return () => {
       console.warn = originalWarn;
@@ -88,18 +96,14 @@ export const CodeEditor = () => {
     };
   }, []);
 
-  if (!isReady) {
-    return <EditorSkeleton />;
-  }
-
   return (
-    <div className="flex flex-col h-full w-full bg-white dark:bg-zinc-950 text-black dark:text-white border border-neutral-200 dark:border-neutral-800 rounded-sm overflow-hidden shadow-sm transition-colors duration-200 min-h-0">
-      <div className="flex shrink-0 items-center justify-between px-4 py-3 bg-neutral-50 dark:bg-zinc-900 border-b border-neutral-200 dark:border-neutral-800">
+    <div className="flex flex-col h-full w-full bg-background text-foreground border rounded-lg overflow-hidden shadow-sm transition-colors duration-200 min-h-0">
+      <div className="flex flex-wrap gap-2 shrink-0 items-center justify-between px-4 py-3 bg-muted/40 border-b">
         <div className="flex items-center gap-2">
           {format === 'json' ? (
-            <FileJson className="text-black dark:text-white" size={16} />
+            <FileJson className="text-foreground" size={16} />
           ) : (
-            <Layers className="text-black dark:text-white" size={16} />
+            <Layers className="text-foreground" size={16} />
           )}
           <span className="font-bold text-xs tracking-wider uppercase">
             {t('title', { format: format.toUpperCase() })}
@@ -107,23 +111,16 @@ export const CodeEditor = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            className="px-3 py-1.5 text-xs font-medium border border-black bg-white text-black hover:bg-black hover:text-white dark:border-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
-            type="button"
-            onClick={handleFileLoadClick}
-          >
+          <Button className="text-xs h-8 gap-1.5" size="sm" variant="outline" onClick={handleFileLoadClick}>
             <Upload size={14} />
             {t('loadFileBtn')}
-          </button>
+          </Button>
 
-          <button
-            className={`px-3 py-1.5 text-xs font-medium border flex items-center gap-1.5 transition-all duration-200 ${
-              isSaved
-                ? 'border-neutral-200 text-neutral-400 bg-neutral-50 dark:border-neutral-800 dark:text-neutral-500 dark:bg-zinc-900 cursor-default'
-                : 'border-black bg-white text-black hover:bg-black hover:text-white dark:border-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black cursor-pointer'
-            }`}
+          <Button
+            className="text-xs h-8 gap-1.5"
             disabled={isSaved}
-            type="button"
+            size="sm"
+            variant={isSaved ? 'secondary' : 'outline'}
             onClick={saveSchema}
           >
             {isSaved ? (
@@ -137,60 +134,57 @@ export const CodeEditor = () => {
                 {t('saveSchemaBtn')}
               </>
             )}
-          </button>
+          </Button>
 
-          <button
-            className={`px-3 py-1.5 text-xs font-medium border transition-all duration-200 ${
-              isValid
-                ? 'border-black bg-black text-white hover:bg-white hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white cursor-pointer'
-                : 'border-neutral-200 text-neutral-400 bg-neutral-50 dark:border-neutral-800 dark:text-neutral-600 dark:bg-zinc-900 cursor-not-allowed'
-            }`}
+          <Button
+            className="text-xs h-8"
             disabled={!isValid}
-            type="button"
+            size="sm"
+            variant={isValid ? 'default' : 'secondary'}
             onClick={toggleFormat}
           >
             {t('switchToBtn', { targetFormat: format === 'json' ? 'YAML' : 'JSON' })}
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="flex-1 relative w-full min-h-0">
-        <textarea
-          className="absolute inset-0 w-full h-full p-4 bg-white dark:bg-black font-mono text-sm resize-none focus:outline-none text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 dark:placeholder-neutral-600 transition-colors duration-200 overflow-y-auto"
+        <Textarea
+          className="absolute inset-0 w-full h-full p-4 bg-background font-mono text-sm resize-none focus-visible:ring-0 focus-visible:ring-offset-0 border-0 rounded-none text-foreground placeholder:text-muted-foreground transition-colors duration-200 overflow-y-auto"
           placeholder={t('textareaPlaceholder')}
           value={schema}
           onChange={(e) => setSchema(e.target.value)}
         />
       </div>
 
-      <div
-        className={`p-4 border-t flex shrink-0 items-start gap-3 text-xs transition-colors duration-300 ${
-          isValid
-            ? 'bg-emerald-50/60 border-emerald-200 text-emerald-900 dark:bg-emerald-950/20 dark:border-emerald-900/50 dark:text-emerald-300'
-            : 'bg-rose-50 border-rose-200 text-rose-900 dark:bg-rose-950/20 dark:border-rose-900/50 dark:text-rose-300'
-        }`}
-      >
+      <div className="p-4 border-t shrink-0">
         {isValid ? (
-          <>
-            <CheckCircle className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" size={16} />
-            <div className="font-medium tracking-wide">{t('validSchemaMsg')}</div>
-          </>
+          <Alert
+            className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 [&>svg]:text-emerald-600 dark:[&>svg]:text-emerald-400"
+            variant="default"
+          >
+            <CheckCircle className="h-4 w-4" />
+            <AlertDescription className="font-medium tracking-wide">{t('validSchemaMsg')}</AlertDescription>
+          </Alert>
         ) : (
-          <>
-            <AlertCircle className="mt-0.5 shrink-0 text-rose-600 dark:text-rose-400" size={16} />
-            <div className="flex-1">
-              <span className="font-extrabold block mb-1.5 uppercase tracking-wider text-[10px] text-rose-700 dark:text-rose-400">
-                {t('invalidSchemaTitle')}
-              </span>
-              <ul className="list-disc list-inside space-y-1 font-mono text-rose-800 dark:text-rose-300/90">
+          <Alert
+            className="bg-destructive/10 text-destructive border-destructive/20 [&>svg]:text-destructive"
+            variant="destructive"
+          >
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle className="font-extrabold uppercase tracking-wider text-[10px] mb-1.5">
+              {t('invalidSchemaTitle')}
+            </AlertTitle>
+            <AlertDescription>
+              <ul className="list-disc list-inside space-y-1 font-mono text-xs">
                 {safeErrors.length > 0 && safeErrors[0] !== '' ? (
                   safeErrors.map((err: string, idx: number) => <li key={idx}>{err}</li>)
                 ) : (
                   <li>{t('emptySchemaMsg')}</li>
                 )}
               </ul>
-            </div>
-          </>
+            </AlertDescription>
+          </Alert>
         )}
       </div>
     </div>
