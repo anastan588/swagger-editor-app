@@ -1,5 +1,5 @@
 import { type AnchorHTMLAttributes } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Header from '@/app/components/Header';
@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   locale: 'en',
   pathname: '/',
   routerReplace: vi.fn(),
+  routerRefresh: vi.fn(),
   signOut: vi.fn(),
   authState: {
     isAuthenticated: false,
@@ -32,6 +33,7 @@ vi.mock('@/i18n/navigation', () => ({
   usePathname: () => mocks.pathname,
   useRouter: () => ({
     replace: mocks.routerReplace,
+    refresh: mocks.routerRefresh,
   }),
 }));
 
@@ -48,6 +50,7 @@ describe('App Header', () => {
     mocks.pathname = '/';
     mocks.authState = { isAuthenticated: false, isAuthReady: true };
     mocks.routerReplace.mockClear();
+    mocks.routerRefresh.mockClear();
     mocks.signOut.mockClear();
   });
 
@@ -64,8 +67,9 @@ describe('App Header', () => {
     expect(screen.getByRole('combobox')).toHaveValue('en');
   });
 
-  it('renders authenticated links and signs out', () => {
+  it('renders authenticated links and signs out', async () => {
     mocks.authState = { isAuthenticated: true, isAuthReady: true };
+    mocks.signOut.mockResolvedValue(undefined);
 
     render(<Header />);
 
@@ -74,6 +78,9 @@ describe('App Header', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Header.signOut' }));
 
     expect(mocks.signOut).toHaveBeenCalledTimes(1);
-    expect(mocks.routerReplace).toHaveBeenCalledWith('/');
+
+    await waitFor(() => {
+      expect(mocks.routerReplace).toHaveBeenCalledWith('/');
+    });
   });
 });
