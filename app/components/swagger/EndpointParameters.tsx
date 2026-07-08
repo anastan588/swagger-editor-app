@@ -25,7 +25,7 @@ export const EndpointParameters: React.FC<EndpointParametersProps> = ({ paramete
             key={param.name}
             className="flex items-center gap-4 text-xs font-mono py-2 border-b border-neutral-100 dark:border-neutral-800/40 last:border-0"
           >
-            <div className="w-1/4 min-w-[120px]">
+            <div className="w-1/4 min-w-30">
               <span className="font-bold text-neutral-700 dark:text-neutral-300">{param.name}</span>
               {param.required ? <span className="text-rose-500 ml-0.5">*</span> : null}
               <span className="text-neutral-400 dark:text-neutral-500 block text-[10px] lowercase font-sans">

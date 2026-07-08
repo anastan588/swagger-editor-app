@@ -27,7 +27,7 @@ export const ConsoleHeadersTable: React.FC<ConsoleHeadersTableProps> = ({ header
                 key={key}
                 className="border-b border-neutral-100 dark:border-neutral-800/40 last:border-0 hover:bg-neutral-50/40 dark:hover:bg-zinc-900/30 transition-colors"
               >
-                <td className="p-2 pl-3 font-bold text-neutral-500 dark:text-neutral-400 select-all truncate max-w-[200px]">
+                <td className="p-2 pl-3 font-bold text-neutral-500 dark:text-neutral-400 select-all truncate max-w-50">
                   {key}
                 </td>
                 <td className="p-2 text-neutral-700 dark:text-neutral-300 break-all select-all leading-normal">
@@ -37,7 +37,7 @@ export const ConsoleHeadersTable: React.FC<ConsoleHeadersTableProps> = ({ header
             ))
           ) : (
             <tr>
-              <td colSpan={2} className="p-4 text-center text-neutral-400 dark:text-neutral-500 italic">
+              <td className="p-4 text-center text-neutral-400 dark:text-neutral-500 italic" colSpan={2}>
                 {t('noHeaders')}
               </td>
             </tr>

@@ -109,7 +109,7 @@
       "copied": "Скопировано!",
       "generateCurl": "Сгенерировать cURL",
       "responsesMatrix": "Матрица ответов (Responses)",
-       "parameters": "Параметры",
+      "parameters": "Параметры",
       "paramIn": "в {location}",
       "placeholderParam": "Введите значение ({type})"
     },

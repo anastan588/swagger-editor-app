@@ -19,7 +19,7 @@ interface ResponseConsoleProps {
 export const ResponseConsole: React.FC<ResponseConsoleProps> = ({ responseState }) => {
   const t = useTranslations('EditorPage.ResponseConsole');
   const [activeTab, setActiveTab] = useState<'body' | 'headers'>('body');
-  const [bodyFormat, setBodyFormat] = useState<'json' | 'yaml'>('json');
+  const [bodyFormat] = useState<'json' | 'yaml'>('json');
   const [copied, setCopied] = useState(false);
 
   const responseType = useMemo<'json' | 'html' | 'text'>(() => {
@@ -62,13 +62,7 @@ export const ResponseConsole: React.FC<ResponseConsoleProps> = ({ responseState 
 
   return (
     <div className="mt-2 border-t border-neutral-200 dark:border-neutral-800 pt-4 flex flex-col gap-3">
-      <ConsoleMeta
-        activeTab={activeTab}
-        bodyFormat={bodyFormat}
-        responseState={responseState}
-        responseType={responseType}
-        setBodyFormat={setBodyFormat}
-      />
+      <ConsoleMeta responseState={responseState} responseType={responseType} />
       {responseState.requestUrl ? (
         <div className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500 break-all bg-neutral-50 dark:bg-zinc-900/30 p-2 rounded-xs border border-neutral-100 dark:border-neutral-800/40 select-all">
           <span className="font-bold mr-1.5 text-neutral-500 dark:text-neutral-400 font-sans">{t('tracer')}</span>

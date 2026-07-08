@@ -61,7 +61,7 @@ export const JSONBeautifier: React.FC<JSONBeautifierProps> = ({ rawJson }) => {
         }
 
         return (
-          <div key={index} className="min-h-[1.25rem] whitespace-pre select-all">
+          <div key={index} className="min-h-5 whitespace-pre select-all">
             {matches.length > 0 ? matches : line}
           </div>
         );

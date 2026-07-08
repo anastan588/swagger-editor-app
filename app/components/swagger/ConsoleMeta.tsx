@@ -8,18 +8,9 @@ import { ResponseState } from './types';
 interface ConsoleMetaProps {
   responseState: ResponseState;
   responseType: string;
-  bodyFormat: 'json' | 'yaml';
-  setBodyFormat: (format: 'json' | 'yaml') => void;
-  activeTab: 'body' | 'headers';
 }
 
-export const ConsoleMeta: React.FC<ConsoleMetaProps> = ({
-  responseState,
-  responseType,
-  bodyFormat,
-  setBodyFormat,
-  activeTab,
-}) => {
+export const ConsoleMeta: React.FC<ConsoleMetaProps> = ({ responseState, responseType }) => {
   const t = useTranslations('EditorPage.ResponseConsole');
   const isSuccess = responseState.status >= 200 && responseState.status < 300;
 
@@ -50,32 +41,6 @@ export const ConsoleMeta: React.FC<ConsoleMetaProps> = ({
           {t('type', { type: responseType })}
         </span>
       </div>
-      {activeTab === 'body' && responseType === 'json' ? (
-        <div className="flex items-center border border-neutral-200 dark:border-neutral-800 rounded-xs overflow-hidden bg-neutral-50 dark:bg-zinc-900 text-[10px] uppercase font-sans select-none font-semibold">
-          <button
-            className={`px-2 py-1 transition-colors ${
-              bodyFormat === 'json'
-                ? 'bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-950'
-                : 'text-neutral-400 hover:text-neutral-600'
-            }`}
-            type="button"
-            onClick={() => setBodyFormat('json')}
-          >
-            JSON
-          </button>
-          <button
-            className={`px-2 py-1 transition-colors ${
-              bodyFormat === 'yaml'
-                ? 'bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-950'
-                : 'text-neutral-400 hover:text-neutral-600'
-            }`}
-            type="button"
-            onClick={() => setBodyFormat('yaml')}
-          >
-            YAML
-          </button>
-        </div>
-      ) : null}
     </div>
   );
 };

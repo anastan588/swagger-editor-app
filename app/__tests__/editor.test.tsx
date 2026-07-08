@@ -35,7 +35,7 @@ vi.mock('@/app/components/CodeEditor', () => ({
   },
 }));
 
-vi.mock('@/app/components/SwaggerViewer', () => ({
+vi.mock('@/app/components/swagger/SwaggerViewer', () => ({
   SwaggerViewer: function MockSwaggerViewer() {
     return <div data-testid="swagger-viewer">Swagger Viewer</div>;
   },
@@ -51,7 +51,7 @@ const mockMatchMedia = (matches: boolean) => {
       matches,
       media: query,
       onchange: null,
-      addEventListener: vi.fn((event, callback) => callback({ matches })),
+      addEventListener: vi.fn((_event: string, callback: (e: { matches: boolean }) => void) => callback({ matches })),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
     })),
@@ -61,6 +61,8 @@ const mockMatchMedia = (matches: boolean) => {
 describe('EditorPage and EditorWorkspace Components', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+
     mocks.getClaims.mockClear();
     mocks.getUser.mockClear();
     mocks.from.mockClear();
@@ -78,9 +80,11 @@ describe('EditorPage and EditorWorkspace Components', () => {
   it('renders horizontal flexible multi-panel workspace layout standard desktop viewports', async () => {
     mockMatchMedia(false);
 
+    const ResolvedPage = await EditorPage();
+
     render(
       <AuthContext.Provider value={{ isAuthenticated: true, userName: 'Test', signOut: vi.fn() }}>
-        {await EditorPage()}
+        {ResolvedPage}
       </AuthContext.Provider>,
     );
 
@@ -96,9 +100,11 @@ describe('EditorPage and EditorWorkspace Components', () => {
   it('switches dynamically to portrait stack list design layouts on small screen orientations', async () => {
     mockMatchMedia(true);
 
+    const ResolvedPage = await EditorPage();
+
     render(
       <AuthContext.Provider value={{ isAuthenticated: true, userName: 'Test', signOut: vi.fn() }}>
-        {await EditorPage()}
+        {ResolvedPage}
       </AuthContext.Provider>,
     );
 
