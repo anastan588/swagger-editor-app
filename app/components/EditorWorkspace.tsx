@@ -3,7 +3,7 @@
 import React, { useSyncExternalStore } from 'react';
 
 import { CodeEditor } from '@/app/components/CodeEditor';
-import { SwaggerViewer } from '@/app/components/SwaggerViewer';
+import { SwaggerViewer } from '@/app/components/swagger/SwaggerViewer';
 
 const subscribe = (callback: () => void) => {
   const mediaQuery = window.matchMedia('(orientation: portrait)');

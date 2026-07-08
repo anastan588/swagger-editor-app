@@ -93,6 +93,39 @@
     "CompilerErrors": {
       "jsonToYamlFailed": "Failed to stringify JSON structure to YAML format.",
       "yamlToJsonFailed": "Invalid YAML syntax structure."
+    },
+    "SwaggerViewer": {
+      "serverTargetHost": "Active Server Target Host (Computed from schema or overridden manually):",
+      "placeholderHost": "e.g., https://wizardworldapi.com",
+      "awaitingConfig": "Awaiting valid configuration to generate interactive UI documentation...",
+      "detected": "{format} Detected"
+    },
+    "EndpointRow": {
+      "requestBodySchema": "Request Body Schema",
+      "executing": "Executing...",
+      "executeRequest": "Execute Request",
+      "copied": "Copied to Clipboard!",
+      "generateCurl": "Generate cURL",
+      "responsesMatrix": "Responses Matrix",
+      "parameters": "Parameters",
+      "paramIn": "in {location}",
+      "placeholderParam": "Enter value ({type})"
+    },
+    "ResponseConsole": {
+      "diagnostics": "Server Diagnostics:",
+      "latency": "Latency: {ms} ms",
+      "length": "Length: {size}",
+      "type": "Type: {type}",
+      "tracer": "Resolved Host Tracer:",
+      "bodyTab": "Response Body",
+      "headersTab": "Headers ({count})",
+      "noBody": "No body payload content returned from target server.",
+      "thField": "Header Field",
+      "thValue": "Value Mapping Pair",
+      "noHeaders": "No metadata headers mapping indexes found.",
+      "yamlError": "Failed to convert JSON response to YAML format.",
+      "copy": "Copy JSON",
+      "copied": "Copied!"
     }
   }
 }

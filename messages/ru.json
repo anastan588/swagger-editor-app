@@ -95,6 +95,39 @@
     "CompilerErrors": {
       "jsonToYamlFailed": "Не удалось преобразовать структуру JSON в формат YAML.",
       "yamlToJsonFailed": "Неверная синтаксическая структура YAML."
+    },
+    "SwaggerViewer": {
+      "serverTargetHost": "Активный целевой хост сервера (вычислен из схемы или изменен вручную):",
+      "placeholderHost": "например, https://wizardworldapi.com",
+      "awaitingConfig": "Ожидание корректной конфигурации для генерации интерактивной документации...",
+      "detected": "Обнаружен {format}"
+    },
+    "EndpointRow": {
+      "requestBodySchema": "Схема тела запроса (Request Body)",
+      "executing": "Выполнение...",
+      "executeRequest": "Выполнить запрос",
+      "copied": "Скопировано!",
+      "generateCurl": "Сгенерировать cURL",
+      "responsesMatrix": "Матрица ответов (Responses)",
+       "parameters": "Параметры",
+      "paramIn": "в {location}",
+      "placeholderParam": "Введите значение ({type})"
+    },
+    "ResponseConsole": {
+      "diagnostics": "Диагностика сервера:",
+      "latency": "Задержка: {ms} мс",
+      "length": "Размер: {size}",
+      "type": "Тип: {type}",
+      "tracer": "Трассировщик хоста:",
+      "bodyTab": "Тело ответа",
+      "headersTab": "Заголовки ({count})",
+      "noBody": "Целевой сервер вернул пустой ответ (нет тела payload).",
+      "thField": "Поле заголовка",
+      "thValue": "Значение заголовка",
+      "noHeaders": "Метаданные или индексы сопоставления заголовков не найдены.",
+      "yamlError": "Не удалось преобразовать структуру JSON-ответа в формат YAML.",
+      "copy": "Копировать JSON",
+      "copied": "Скопировано!"
     }
   }
 }
