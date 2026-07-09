@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FlattenedEndpoint } from '@/app/components/swagger/types';
 import { useSwaggerViewer } from '@/app/hooks/useSwaggerViewer';
@@ -70,6 +70,7 @@ describe('useSwaggerViewer', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
     vi.stubGlobal('fetch', mockFetch);
 
     Object.defineProperty(navigator, 'clipboard', {
@@ -94,6 +95,10 @@ describe('useSwaggerViewer', () => {
     supabaseMocks.getUser.mockResolvedValue({ data: { user: { id: 'user_123' } } });
     supabaseMocks.from.mockReturnValue({ insert: supabaseMocks.insert });
     supabaseMocks.insert.mockResolvedValue({ error: null });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('initializes hooks with default core structures matching configurations state', () => {
@@ -133,5 +138,90 @@ describe('useSwaggerViewer', () => {
     });
 
     expect(result.current.requestBodies['post-/users']).toBe('{"name": "test"}');
+  });
+
+  it('should parse YAML schemas when YAML format is defined', () => {
+    mockSchemaContext.mockReturnValue({
+      schema: 'swagger: "2.0"',
+      isValid: true,
+      format: 'yaml',
+    });
+
+    const mockYamlObj = { openapi: '3.0.0' };
+    vi.spyOn(ParserUtils, 'parseYamlSchema').mockReturnValue(mockYamlObj);
+
+    const { result } = renderHook(() => useSwaggerViewer());
+
+    expect(ParserUtils.parseYamlSchema).toHaveBeenCalledWith('swagger: "2.0"');
+    expect(result.current.parsedObject).toEqual(mockYamlObj);
+  });
+
+  it('should write commands to clipboard and activate feedback tracking on curl generation', async () => {
+    const { result } = renderHook(() => useSwaggerViewer());
+
+    await act(async () => {
+      result.current.handleGenerateCurl(fakeEndpoints[0]);
+    });
+
+    expect(writeTextMock).toHaveBeenCalledWith('curl command string');
+    expect(result.current.copiedId).toBe('get-/users');
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(result.current.copiedId).toBeNull();
+  });
+
+  it('should invoke server side proxy endpoint and handle successful execution requests', async () => {
+    const mockResponsePayload = {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+      body: '{"success":true}',
+    };
+
+    mockFetch.mockResolvedValue({
+      json: vi.fn().mockResolvedValue(mockResponsePayload),
+    });
+
+    const { result } = renderHook(() => useSwaggerViewer());
+
+    await act(async () => {
+      await result.current.handleExecuteRequest(fakeEndpoints[0]);
+    });
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining('/api/proxy'),
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          url: '/users',
+          method: 'get',
+          headers: { 'X-Test': 'true' },
+          body: undefined,
+        }),
+      }),
+    );
+
+    const finalResponse = result.current.responses['get-/users'];
+    expect(finalResponse.status).toBe(200);
+    expect(finalResponse.body).toBe('{"success":true}');
+    expect(finalResponse.loading).toBe(false);
+    expect(finalResponse.latency).toBeDefined();
+  });
+
+  it('should fail gracefully and produce explicit exception responses when the proxy stack rejects', async () => {
+    mockFetch.mockRejectedValue(new Error('Proxy crashed'));
+
+    const { result } = renderHook(() => useSwaggerViewer());
+
+    await act(async () => {
+      await result.current.handleExecuteRequest(fakeEndpoints[0]);
+    });
+
+    const errorState = result.current.responses['get-/users'];
+    expect(errorState.status).toBe(500);
+    expect(errorState.body).toContain('Proxy crashed');
+    expect(errorState.loading).toBe(false);
   });
 });
