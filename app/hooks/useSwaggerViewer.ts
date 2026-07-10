@@ -12,7 +12,6 @@ import {
   generateCurlCommand,
   parseYamlSchema,
 } from '@/app/utils/SwaggerViewerParser';
-import { createClient } from '@/lib/supabase/client';
 
 export const useSwaggerViewer = () => {
   const { schema, isValid, format } = useSchema();
@@ -128,33 +127,6 @@ export const useSwaggerViewer = () => {
         ...prev,
         [endpoint.id]: { status: 500, headers: {}, body: finalResponseBody, loading: false, latency },
       }));
-    }
-
-    if (isAuthenticated) {
-      (async () => {
-        try {
-          const supabase = createClient();
-          const {
-            data: { user },
-          } = await supabase.auth.getUser();
-
-          if (user) {
-            await supabase.from('request_history').insert({
-              user_id: user.id,
-              method: methodUpper,
-              path: endpoint.path,
-              target_host: currentTargetBase,
-              request_body: ['POST', 'PUT', 'PATCH', 'DELETE'].includes(methodUpper) ? bodyPayload : null,
-              response_status: finalStatus,
-              response_body: finalResponseBody,
-              latency_ms: latency,
-              created_at: new Date().toISOString(),
-            });
-          }
-        } catch (supabaseError) {
-          console.error(supabaseError);
-        }
-      })();
     }
   };
 

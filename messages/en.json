@@ -127,5 +127,15 @@
       "copy": "Copy JSON",
       "copied": "Copied!"
     }
+  },
+  "HistoryPage": {
+    "title": "Request History & Analytics",
+    "emptyDescription": "You haven't executed any requests yet.",
+    "goToEditor": "Go to Editor & Viewer",
+    "statusCode": "Status code",
+    "latency": "Latency",
+    "requestSize": "Request size",
+    "responseSize": "Response size",
+    "error": "Error"
   }
 }
