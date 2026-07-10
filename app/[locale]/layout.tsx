@@ -42,7 +42,7 @@ export default async function RootLayout({
           <AuthProvider initialIsAuthenticated={isAuthenticated}>
             <ErrorToastProvider>
               <Header />
-              <main className="flex flex-1 flex-col">{children}</main>
+              <main className="flex w-full flex-1 flex-col">{children}</main>
               <Footer />
             </ErrorToastProvider>
           </AuthProvider>
