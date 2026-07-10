@@ -5,6 +5,15 @@ import { describe, expect, it, vi } from 'vitest';
 
 import Home from '@/app/[locale]/page';
 
+vi.mock('@/i18n/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => '/',
+}));
+
 vi.mock('next-intl', () => ({
   useTranslations:
     () =>
@@ -12,18 +21,25 @@ vi.mock('next-intl', () => ({
       `mocked_${key}`,
 }));
 
-vi.mock('@/app/components/LanguageSwitcher', () => ({
-  default: function MockLanguageSwitcher() {
-    return <div data-testid="language-switcher">Language Switcher</div>;
+vi.mock('@/app/components/HomeInteractive', () => ({
+  default: function MockHomeInteractive({ welcome }: { welcome: string }) {
+    return <h1 data-testid="mock-welcome">{welcome}</h1>;
   },
 }));
 
-describe('Home Component', () => {
-  it('renders the header with translated text content', () => {
-    render(<Home />);
+describe('Home Component (SSR Page Layout)', () => {
+  it('renders the base layout structure and passes translations correctly', async () => {
+    const { container } = render(await Home());
 
-    const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent('mocked_title');
+    const wrapper = container.querySelector('.max-w-3xl');
+    expect(wrapper).toBeInTheDocument();
+
+    const decorativeLine = container.querySelector('.mb-6');
+    expect(decorativeLine).toBeInTheDocument();
+    expect(decorativeLine).toHaveClass('bg-black', 'dark:bg-white');
+
+    const welcomeText = screen.getByTestId('mock-welcome');
+    expect(welcomeText).toBeInTheDocument();
+    expect(welcomeText).toHaveTextContent('mocked_welcome');
   });
 });

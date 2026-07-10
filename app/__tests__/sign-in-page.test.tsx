@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import SignInPage from '@/app/[locale]/sign-in/page';
 
 const mocks = vi.hoisted(() => ({
-  getUser: vi.fn(),
+  getClaims: vi.fn(),
   redirect: vi.fn(),
 }));
 
 vi.mock('@/lib/supabase/server', () => ({
   createClient: async () => ({
-    auth: { getUser: mocks.getUser },
+    auth: { getClaims: mocks.getClaims },
   }),
 }));
 
@@ -27,8 +27,13 @@ vi.mock('@/app/components/auth/sign-in-form', () => ({
 }));
 
 describe('SignInPage', () => {
+  beforeEach(() => {
+    mocks.getClaims.mockClear();
+    mocks.redirect.mockClear();
+  });
+
   it('renders sign-in form for unauthenticated user', async () => {
-    mocks.getUser.mockResolvedValue({ data: { user: null } });
+    mocks.getClaims.mockResolvedValue({ data: { claims: null } });
 
     render(await SignInPage());
 
@@ -37,7 +42,7 @@ describe('SignInPage', () => {
   });
 
   it('redirects authenticated user to home page', async () => {
-    mocks.getUser.mockResolvedValue({ data: { user: { id: '123' } } });
+    mocks.getClaims.mockResolvedValue({ data: { claims: { sub: '123' } } });
 
     render(await SignInPage());
 
