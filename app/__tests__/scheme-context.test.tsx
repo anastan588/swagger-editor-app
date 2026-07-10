@@ -2,6 +2,7 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 import { AuthContext } from '@/app/context/AuthProvider';
 import { SchemaProvider, useSchema } from '@/app/context/SchemaContext';
 import { parseInitialSchema } from '@/app/utils/schemaParser';
@@ -55,12 +56,15 @@ const createMockAuthContext = (isAuthenticated: boolean): AuthContextValue => ({
 const renderWithProviders = (
   initialSchema: string,
   authValue: AuthContextValue | null = createMockAuthContext(true),
+  showError?: (message: string) => void,
 ) => {
   return render(
     <AuthContext.Provider value={authValue}>
-      <SchemaProvider initialSchema={initialSchema}>
-        <TestComponent />
-      </SchemaProvider>
+      <ErrorToastContext value={{ showError: showError ?? vi.fn() }}>
+        <SchemaProvider initialSchema={initialSchema}>
+          <TestComponent />
+        </SchemaProvider>
+      </ErrorToastContext>
     </AuthContext.Provider>,
   );
 };
@@ -189,16 +193,18 @@ describe('SchemaProvider', () => {
   });
 
   it('should append structured conversion string message if toggleFormat throws an error', () => {
+    const showError = vi.fn();
     vi.mocked(jsonToYaml).mockImplementation(() => {
       throw new Error('YAML generation broken');
     });
-    renderWithProviders('{"key": "value"}');
+    renderWithProviders('{"key": "value"}', createMockAuthContext(true), showError);
 
     act(() => {
       screen.getByTestId('toggle-btn').click();
     });
 
     expect(screen.getByTestId('errors').textContent).toContain('YAML generation broken');
+    expect(showError).toHaveBeenCalledWith('YAML generation broken');
   });
 
   it('should invoke supabase upsert when saveSchema is called with layout values', async () => {
@@ -244,5 +250,26 @@ describe('SchemaProvider', () => {
     expect(mockDelete).toHaveBeenCalled();
     expect(mockEq).toHaveBeenCalledWith('user_id', 'usr_123');
     expect(screen.getByTestId('schema').textContent).toBe('');
+  });
+
+  it('should show a user-friendly message when schema upsert fails', async () => {
+    const showError = vi.fn();
+    const mockUpsert = vi.fn().mockResolvedValue({ error: new Error('Database write failed') });
+    const mockFrom = vi.fn().mockReturnValue({ upsert: mockUpsert });
+    const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'usr_123' } } });
+
+    vi.mocked(createClient).mockReturnValue({
+      auth: { getUser: mockGetUser },
+      from: mockFrom,
+    } as unknown as ReturnType<typeof createClient>);
+
+    renderWithProviders('valid-schema', createMockAuthContext(true), showError);
+
+    await act(async () => {
+      await screen.getByTestId('save-btn').click();
+    });
+
+    expect(showError).toHaveBeenCalledWith('Unable to save the schema. Please try again.');
+    expect(screen.getByTestId('isSaved').textContent).toBe('true');
   });
 });

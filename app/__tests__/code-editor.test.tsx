@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CodeEditor } from '@/app/components/CodeEditor';
+import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 
 const mockUseSchema = vi.fn();
 vi.mock('@/app/context/SchemaContext', () => ({
@@ -118,6 +119,68 @@ describe('CodeEditor Component', () => {
       () => {
         expect(mockShowOpenFilePicker).toHaveBeenCalled();
         expect(setSchemaMock).toHaveBeenCalledWith('{"openapi": "3.0.0"}');
+      },
+      { container },
+    );
+  });
+
+  it('shows a user-friendly error when file loading fails', async () => {
+    const showError = vi.fn();
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockUseSchema.mockReturnValue({
+      schema: '',
+      setSchema: vi.fn(),
+      format: 'json',
+      toggleFormat: vi.fn(),
+      isValid: false,
+      isSaved: true,
+      errors: [],
+      saveSchema: vi.fn(),
+    });
+    mockShowOpenFilePicker.mockRejectedValue(new Error('File system failed'));
+
+    const { container } = render(
+      <ErrorToastContext value={{ showError }}>
+        <CodeEditor />
+      </ErrorToastContext>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'loadFileBtn' }));
+
+    await waitFor(
+      () => {
+        expect(showError).toHaveBeenCalledWith('loadFileError');
+      },
+      { container },
+    );
+
+    errorSpy.mockRestore();
+  });
+
+  it('shows a user-friendly error when schema saving fails', async () => {
+    const showError = vi.fn();
+    mockUseSchema.mockReturnValue({
+      schema: 'openapi: 3.0.0',
+      setSchema: vi.fn(),
+      format: 'yaml',
+      toggleFormat: vi.fn(),
+      isValid: true,
+      isSaved: false,
+      errors: [],
+      saveSchema: vi.fn().mockRejectedValue(new Error('Save failed')),
+    });
+
+    const { container } = render(
+      <ErrorToastContext value={{ showError }}>
+        <CodeEditor />
+      </ErrorToastContext>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'saveSchemaBtn' }));
+
+    await waitFor(
+      () => {
+        expect(showError).toHaveBeenCalledWith('saveSchemaError');
       },
       { container },
     );

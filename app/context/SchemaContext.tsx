@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
+import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 import { AuthContext } from '@/app/context/AuthProvider';
 import { parseInitialSchema } from '@/app/utils/schemaParser';
 import { jsonToYaml, yamlToJson } from '@/app/utils/yamlCompiler';
@@ -23,6 +24,7 @@ const SchemaContext = createContext<SchemaContextValue | null>(null);
 
 export const SchemaProvider = ({ children, initialSchema }: { children: React.ReactNode; initialSchema: string }) => {
   const auth = useContext(AuthContext);
+  const errorToast = useContext(ErrorToastContext);
   const isAuthenticated = auth?.isAuthenticated ?? false;
 
   const [schema, setSchemaState] = useState<string>(initialSchema);
@@ -65,31 +67,46 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
   const saveSchema = async () => {
     if (!isAuthenticated) return;
 
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    if (!user) return;
+      if (!user) {
+        errorToast?.showError('Unable to save the schema because the session is no longer active.');
+        return;
+      }
 
-    const trimmedSchema = schema.trim();
+      const trimmedSchema = schema.trim();
 
-    if (trimmedSchema) {
-      const { error } = await supabase
-        .from('schemas')
-        .upsert(
-          { user_id: user.id, content: trimmedSchema, updated_at: new Date().toISOString() },
-          { onConflict: 'user_id' },
-        );
+      if (trimmedSchema) {
+        const { error } = await supabase
+          .from('schemas')
+          .upsert(
+            { user_id: user.id, content: trimmedSchema, updated_at: new Date().toISOString() },
+            { onConflict: 'user_id' },
+          );
 
-      if (!error) setIsSaved(true);
-    } else {
-      const { error } = await supabase.from('schemas').delete().eq('user_id', user.id);
+        if (error) {
+          errorToast?.showError('Unable to save the schema. Please try again.');
+          return;
+        }
 
-      if (!error) {
+        setIsSaved(true);
+      } else {
+        const { error } = await supabase.from('schemas').delete().eq('user_id', user.id);
+
+        if (error) {
+          errorToast?.showError('Unable to clear the saved schema. Please try again.');
+          return;
+        }
+
         setSchemaState('');
         setIsSaved(true);
       }
+    } catch {
+      errorToast?.showError('Unable to save the schema. Please try again.');
     }
   };
 
@@ -110,6 +127,7 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Conversion error occurred.';
       setErrors([msg]);
+      errorToast?.showError(msg);
     }
   };
 

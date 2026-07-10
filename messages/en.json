@@ -89,7 +89,9 @@
       "textareaPlaceholder": "Paste, type, or load your OpenAPI/Swagger specification (JSON/YAML) here...",
       "validSchemaMsg": "Valid OpenAPI Specification. Endpoints synced down into viewer.",
       "invalidSchemaTitle": "Invalid Schema Specification Error:",
-      "emptySchemaMsg": "No schema provided or layout empty"
+      "emptySchemaMsg": "No schema provided or layout empty",
+      "loadFileError": "Unable to load the selected file. Please try another JSON or YAML file.",
+      "saveSchemaError": "Unable to save the schema. Please try again."
     },
     "EditorSkeleton": {
       "loadingTitle": "Initializing Workspace",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { AlertCircle, Check, CheckCircle, FileJson, Layers, Save, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -8,6 +8,8 @@ import { useSchema } from '@/app/context/SchemaContext';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+
+import { ErrorToastContext } from './ErrorToastContext';
 
 interface ExtendedWindow extends Window {
   showOpenFilePicker?: (options?: {
@@ -20,6 +22,7 @@ interface ExtendedWindow extends Window {
 export const CodeEditor = () => {
   const t = useTranslations('EditorPage.CodeEditor');
   const { schema, setSchema, format, toggleFormat, isValid, isSaved, errors, saveSchema } = useSchema();
+  const errorToast = useContext(ErrorToastContext);
 
   const safeErrors = Array.isArray(errors) ? errors : [String(errors)];
 
@@ -62,8 +65,17 @@ export const CodeEditor = () => {
       }
     } catch (err) {
       if (err instanceof Error && err.name !== 'AbortError') {
+        errorToast?.showError(t('loadFileError'));
         console.error('File access error:', err);
       }
+    }
+  };
+
+  const handleSaveSchema = async () => {
+    try {
+      await saveSchema();
+    } catch {
+      errorToast?.showError(t('saveSchemaError'));
     }
   };
 
@@ -121,7 +133,7 @@ export const CodeEditor = () => {
             disabled={isSaved}
             size="sm"
             variant={isSaved ? 'secondary' : 'outline'}
-            onClick={saveSchema}
+            onClick={handleSaveSchema}
           >
             {isSaved ? (
               <>
