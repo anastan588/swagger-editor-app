@@ -1,6 +1,15 @@
 {
   "HomePage": {
-    "title": "Привет, мир"
+    "welcomeBack": "С возвращением",
+    "welcome": "Приветствуем.",
+    "authSubtitle": "Рады видеть вас снова. Ваш персональный дашборд готов к работе.",
+    "guestSubtitle": "Откройте для себя минималистичное пространство для продуктивности.",
+    "dashboardBtn": "В Swagger Editor",
+    "getStartedBtn": "Начать работу",
+    "workspaceTitle": "Рабочая область Swagger",
+    "workspaceAuthDesc": "Доступ к полной истории проектирования и сохраненным спецификациям.",
+    "workspaceGuestDesc": "Войдите или зарегистрируйтесь, чтобы сохранять историю проектирования API.",
+    "historyLink": "История запросов"
   },
   "Header": {
     "logo": "Swagger Editor",
@@ -67,6 +76,63 @@
       "invalidCredentials": "Неверный email или пароль",
       "emailTaken": "Этот email уже зарегистрирован",
       "common": "Что-то пошло не так. Попробуйте снова."
+    }
+  },
+  "EditorPage": {
+    "workspaceTitle": "Студия Проектирования API",
+    "workspaceSubtitle": "Проектируйте, валидируйте и просматривайте интерактивные спецификации OpenAPI в реальном времени.",
+    "CodeEditor": {
+      "title": "Редактор ({format})",
+      "filePickerDescription": "Файлы спецификаций OpenAPI",
+      "loadFileBtn": "Загрузить файл",
+      "saveSchemaBtn": "Сохранить схему",
+      "savedBtn": "Сохранено",
+      "switchToBtn": "Перейти на {targetFormat}",
+      "textareaPlaceholder": "Вставьте, введите или загрузите вашу спецификацию OpenAPI/Swagger (JSON/YAML) здесь...",
+      "validSchemaMsg": "Валидная спецификация OpenAPI. Эндпоинты синхронизированы с просмотрщиком.",
+      "invalidSchemaTitle": "Ошибка валидации спецификации схемы:",
+      "emptySchemaMsg": "Схема не предоставлена или разметка пуста"
+    },
+    "EditorSkeleton": {
+      "loadingTitle": "Инициализация рабочей области",
+      "loadingDescription": "Восстановление ваших последних сохраненных данных конфигурации OpenAPI из локального хранилища..."
+    },
+    "CompilerErrors": {
+      "jsonToYamlFailed": "Не удалось преобразовать структуру JSON в формат YAML.",
+      "yamlToJsonFailed": "Неверная синтаксическая структура YAML."
+    },
+    "SwaggerViewer": {
+      "serverTargetHost": "Активный целевой хост сервера (вычислен из схемы или изменен вручную):",
+      "placeholderHost": "например, https://wizardworldapi.com",
+      "awaitingConfig": "Ожидание корректной конфигурации для генерации интерактивной документации...",
+      "detected": "Обнаружен {format}"
+    },
+    "EndpointRow": {
+      "requestBodySchema": "Схема тела запроса (Request Body)",
+      "executing": "Выполнение...",
+      "executeRequest": "Выполнить запрос",
+      "copied": "Скопировано!",
+      "generateCurl": "Сгенерировать cURL",
+      "responsesMatrix": "Матрица ответов (Responses)",
+      "parameters": "Параметры",
+      "paramIn": "в {location}",
+      "placeholderParam": "Введите значение ({type})"
+    },
+    "ResponseConsole": {
+      "diagnostics": "Диагностика сервера:",
+      "latency": "Задержка: {ms} мс",
+      "length": "Размер: {size}",
+      "type": "Тип: {type}",
+      "tracer": "Трассировщик хоста:",
+      "bodyTab": "Тело ответа",
+      "headersTab": "Заголовки ({count})",
+      "noBody": "Целевой сервер вернул пустой ответ (нет тела payload).",
+      "thField": "Поле заголовка",
+      "thValue": "Значение заголовка",
+      "noHeaders": "Метаданные или индексы сопоставления заголовков не найдены.",
+      "yamlError": "Не удалось преобразовать структуру JSON-ответа в формат YAML.",
+      "copy": "Копировать JSON",
+      "copied": "Скопировано!"
     }
   }
 }

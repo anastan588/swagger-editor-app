@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import SignInPage from '@/app/[locale]/sign-in/page';
 
@@ -27,6 +27,11 @@ vi.mock('@/app/components/auth/sign-in-form', () => ({
 }));
 
 describe('SignInPage', () => {
+  beforeEach(() => {
+    mocks.getClaims.mockClear();
+    mocks.redirect.mockClear();
+  });
+
   it('renders sign-in form for unauthenticated user', async () => {
     mocks.getClaims.mockResolvedValue({ data: { claims: null } });
 
