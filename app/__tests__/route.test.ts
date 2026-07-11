@@ -25,7 +25,11 @@ describe('POST /api/proxy (Proxy Route Handler)', () => {
   });
 
   it('should return 400 if requestPath is missing in the payload', async () => {
-    vi.mocked(updateSession).mockResolvedValue({ isLoggedIn: false } as never);
+    vi.mocked(updateSession).mockResolvedValue({
+      isLoggedIn: true,
+      userId: 'user_123',
+      supabase: { from: vi.fn().mockReturnValue({ insert: vi.fn().mockResolvedValue({ error: null }) }) },
+    } as never);
     vi.stubGlobal('fetch', vi.fn());
 
     const req = createMockRequest({ body: { method: 'GET', headers: {} } });
@@ -36,8 +40,15 @@ describe('POST /api/proxy (Proxy Route Handler)', () => {
     expect(json.error).toBe('Target request path is missing');
   });
 
-  it('should successfully proxy the request and clean headers', async () => {
-    vi.mocked(updateSession).mockResolvedValue({ isLoggedIn: true } as never);
+  it('should successfully proxy the request, clean headers and record server-side analytics', async () => {
+    const insertMock = vi.fn().mockResolvedValue({ error: null });
+    const fromMock = vi.fn().mockReturnValue({ insert: insertMock });
+
+    vi.mocked(updateSession).mockResolvedValue({
+      isLoggedIn: true,
+      userId: 'user_123',
+      supabase: { from: fromMock },
+    } as never);
 
     const mockTargetResponse = new Response('{"success": true}', {
       status: 200,
@@ -74,11 +85,29 @@ describe('POST /api/proxy (Proxy Route Handler)', () => {
     expect(json.status).toBe(200);
     expect(json.body).toBe('{"success": true}');
     expect(json.headers['custom-header']).toBe('value');
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[TRACKING LOG]'));
+    expect(console.log).not.toHaveBeenCalled();
+
+    expect(fromMock).toHaveBeenCalledWith('request_history');
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        user_id: 'user_123',
+        method: 'POST',
+        path: '/users',
+        target_host: 'https://api.example.com',
+        response_status: 200,
+        request_size_bytes: '{"name": "John"}'.length,
+        response_size_bytes: '{"success": true}'.length,
+        error_details: null,
+      }),
+    );
   });
 
   it('should use clientMockFallback when fetch fails if it is provided', async () => {
-    vi.mocked(updateSession).mockResolvedValue({ isLoggedIn: false } as never);
+    vi.mocked(updateSession).mockResolvedValue({
+      isLoggedIn: true,
+      userId: 'user_123',
+      supabase: { from: vi.fn().mockReturnValue({ insert: vi.fn().mockResolvedValue({ error: null }) }) },
+    } as never);
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')));
 
     const mockFallbackText = '{"mocked": true}';
@@ -99,7 +128,11 @@ describe('POST /api/proxy (Proxy Route Handler)', () => {
   });
 
   it('should return the standard error message when fetch fails if fallback is missing', async () => {
-    vi.mocked(updateSession).mockResolvedValue({ isLoggedIn: false } as never);
+    vi.mocked(updateSession).mockResolvedValue({
+      isLoggedIn: true,
+      userId: 'user_123',
+      supabase: { from: vi.fn().mockReturnValue({ insert: vi.fn().mockResolvedValue({ error: null }) }) },
+    } as never);
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')));
 
     const req = createMockRequest({

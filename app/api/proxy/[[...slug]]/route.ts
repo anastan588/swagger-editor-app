@@ -5,7 +5,7 @@ import { updateSession } from '@/lib/supabase/proxy';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const { isLoggedIn } = await updateSession(request);
+    const { isLoggedIn, userId, supabase } = await updateSession(request);
 
     const schemaTargetBase = request.headers.get('X-Proxy-Target-Base') || '';
     const urlEncodedMock = request.headers.get('X-Proxy-Mock-Fallback') || '';
@@ -58,14 +58,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     let responseBodyText = '';
     let usedMockFallback = false;
     let proxyStatus = 200;
-
+    let networkErrorDetails: string | null = null;
+    const requestStartedAt = performance.now();
     try {
       targetResponse = await fetch(finalDestinationUrl, fetchOptions);
       responseBodyText = await targetResponse.text();
       proxyStatus = targetResponse.status;
-    } catch {
+    } catch (networkError: unknown) {
+      networkErrorDetails = networkError instanceof Error ? networkError.message : 'Network request failed';
       if (clientMockFallback) {
         responseBodyText = clientMockFallback;
+        networkErrorDetails = `${networkErrorDetails} (schema mock fallback used)`;
       } else {
         responseBodyText = JSON.stringify(
           {
@@ -79,6 +82,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       usedMockFallback = true;
       proxyStatus = 200;
     }
+    const durationMs = Math.round(performance.now() - requestStartedAt);
 
     const responseHeaders: Record<string, string> = {};
     if (!usedMockFallback && targetResponse!) {
@@ -90,11 +94,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       responseHeaders['x-dynamic-mock-active'] = 'true';
     }
 
-    if (isLoggedIn) {
+    if (isLoggedIn && userId) {
       try {
-        console.log(
-          `[TRACKING LOG] ${method} -> ${finalDestinationUrl} [Status: ${proxyStatus}] (Dynamic Mocked: ${usedMockFallback})`,
-        );
+        const encoder = new TextEncoder();
+        await supabase.from('request_history').insert({
+          user_id: userId,
+          method: method.toUpperCase(),
+          path: cleanPath,
+          target_host: cleanBase,
+          request_size_bytes: fetchOptions.body ? encoder.encode(fetchOptions.body as string).length : 0,
+          response_status: proxyStatus,
+          response_size_bytes: encoder.encode(responseBodyText).length,
+          latency_ms: durationMs,
+          error_details: networkErrorDetails,
+          created_at: new Date().toISOString(),
+        });
       } catch (trackError: unknown) {
         console.error('History tracking error:', trackError);
       }
