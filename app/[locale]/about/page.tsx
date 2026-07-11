@@ -7,7 +7,7 @@ const teamMembers = [
     github: '@anastan588',
     githubUrl: 'https://github.com/anastan588',
     roleKey: 'teamLead',
-    imageSrc: '/team/anastasia-account.jfif',
+    imageSrc: '/team/anastasia-account.png',
     alt: 'Anastasiya Andronava',
   },
   {
@@ -15,7 +15,7 @@ const teamMembers = [
     github: '@t-gladkaya',
     githubUrl: 'https://github.com/t-gladkaya',
     roleKey: 'developer',
-    imageSrc: '/team/tatsiana-account.jfif',
+    imageSrc: '/team/tatsiana-account.png',
     alt: 'Tatsiana Hladkaya',
   },
   {

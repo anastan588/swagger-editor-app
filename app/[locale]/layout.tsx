@@ -9,6 +9,8 @@ import Header from '@/app/components/Header';
 import { AuthProvider } from '@/app/context/AuthProvider';
 import { createClient } from '@/lib/supabase/server';
 
+import { ErrorToastProvider } from '../components/ErrorToastProvider';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -38,9 +40,11 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
         <NextIntlClientProvider>
           <AuthProvider initialIsAuthenticated={isAuthenticated}>
-            <Header />
-            <main className="flex-1 w-full">{children}</main>
-            <Footer />
+            <ErrorToastProvider>
+              <Header />
+              <main className="flex w-full flex-1 flex-col">{children}</main>
+              <Footer />
+            </ErrorToastProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

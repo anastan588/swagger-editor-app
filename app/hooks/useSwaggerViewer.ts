@@ -2,6 +2,7 @@
 
 import { useContext, useMemo, useState } from 'react';
 
+import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 import { FlattenedEndpoint, ResponseState } from '@/app/components/swagger/types';
 import { AuthContext } from '@/app/context/AuthProvider';
 import { useSchema } from '@/app/context/SchemaContext';
@@ -16,6 +17,7 @@ import {
 export const useSwaggerViewer = () => {
   const { schema, isValid, format } = useSchema();
   const auth = useContext(AuthContext);
+  const errorToast = useContext(ErrorToastContext);
   const isAuthenticated = auth ? auth.isAuthenticated : false;
 
   const [activeInputs, setActiveInputs] = useState<Record<string, Record<string, string>>>({});
@@ -117,6 +119,7 @@ export const useSwaggerViewer = () => {
     } catch (err: unknown) {
       latency = Math.round(performance.now() - startTime);
       const msg = err instanceof Error ? err.message : 'Network handshake failed';
+      errorToast?.showError('Unable to execute the request. Check the target endpoint and try again.');
 
       finalResponseBody = JSON.stringify({
         error: msg,
