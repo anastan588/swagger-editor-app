@@ -47,6 +47,11 @@
     },
     "technologies": "Technologies"
   },
+  "ErrorPage": {
+    "title": "Something went wrong",
+    "description": "We could not load this page. Please try again.",
+    "tryAgain": "Try again"
+  },
   "Auth": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
@@ -84,7 +89,9 @@
       "textareaPlaceholder": "Paste, type, or load your OpenAPI/Swagger specification (JSON/YAML) here...",
       "validSchemaMsg": "Valid OpenAPI Specification. Endpoints synced down into viewer.",
       "invalidSchemaTitle": "Invalid Schema Specification Error:",
-      "emptySchemaMsg": "No schema provided or layout empty"
+      "emptySchemaMsg": "No schema provided or layout empty",
+      "loadFileError": "Unable to load the selected file. Please try another JSON or YAML file.",
+      "saveSchemaError": "Unable to save the schema. Please try again."
     },
     "EditorSkeleton": {
       "loadingTitle": "Initializing Workspace",

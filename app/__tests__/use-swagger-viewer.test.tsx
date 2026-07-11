@@ -2,6 +2,7 @@ import React from 'react';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 import { FlattenedEndpoint } from '@/app/components/swagger/types';
 import { useSwaggerViewer } from '@/app/hooks/useSwaggerViewer';
 import * as ParserUtils from '@/app/utils/SwaggerViewerParser';
@@ -212,8 +213,11 @@ describe('useSwaggerViewer', () => {
 
   it('should fail gracefully and produce explicit exception responses when the proxy stack rejects', async () => {
     mockFetch.mockRejectedValue(new Error('Proxy crashed'));
+    const showError = vi.fn();
 
-    const { result } = renderHook(() => useSwaggerViewer());
+    const { result } = renderHook(() => useSwaggerViewer(), {
+      wrapper: ({ children }) => <ErrorToastContext value={{ showError }}>{children}</ErrorToastContext>,
+    });
 
     await act(async () => {
       await result.current.handleExecuteRequest(fakeEndpoints[0]);
@@ -223,5 +227,6 @@ describe('useSwaggerViewer', () => {
     expect(errorState.status).toBe(500);
     expect(errorState.body).toContain('Proxy crashed');
     expect(errorState.loading).toBe(false);
+    expect(showError).toHaveBeenCalledWith('Unable to execute the request. Check the target endpoint and try again.');
   });
 });

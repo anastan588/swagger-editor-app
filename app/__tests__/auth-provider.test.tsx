@@ -18,7 +18,7 @@ const TestComponent = () => {
     <div>
       <div data-testid="auth-status">{String(context.isAuthenticated)}</div>
       <div data-testid="user-name">{context.userName ?? 'null'}</div>
-      <button type="button" data-testid="signout-btn" onClick={context.signOut}>
+      <button data-testid="signout-btn" type="button" onClick={context.signOut}>
         Sign Out
       </button>
     </div>
