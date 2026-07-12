@@ -43,7 +43,7 @@ describe('SwaggerViewerParser Utilities', () => {
       expect(parseYamlSchema('string')).toEqual({});
     });
 
-    it('logs error and rethrows when yaml parsing throws an exception', () => {
+    it('rethrows yaml parsing exceptions without writing console errors', () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const mockError = new Error('Syntax error');
       vi.mocked(parse).mockImplementation(() => {
@@ -51,7 +51,7 @@ describe('SwaggerViewerParser Utilities', () => {
       });
 
       expect(() => parseYamlSchema('invalid: yaml:')).toThrow(mockError);
-      expect(consoleSpy).toHaveBeenCalled();
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 

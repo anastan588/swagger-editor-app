@@ -11,17 +11,12 @@ export function parseYamlSchema(schemaText: string): Record<string, unknown> {
     return {};
   }
 
-  try {
-    const parsed = parse(schemaText);
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-
-    return {};
-  } catch (error) {
-    console.error('YAML parsing failed:', error);
-    throw error;
+  const parsed = parse(schemaText);
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    return parsed as Record<string, unknown>;
   }
+
+  return {};
 }
 
 export function extractBaseUrl(parsedObject: Record<string, unknown> | null, manualFallbackUrl: string): string {

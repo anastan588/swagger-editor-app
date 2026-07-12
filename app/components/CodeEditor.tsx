@@ -66,7 +66,6 @@ export const CodeEditor = () => {
     } catch (err) {
       if (err instanceof Error && err.name !== 'AbortError') {
         errorToast?.showError(t('loadFileError'));
-        console.error('File access error:', err);
       }
     }
   };
