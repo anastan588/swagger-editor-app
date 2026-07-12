@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 
+import { EndpointContentDetails } from './EndpointContentDetails';
 import { EndpointHeader } from './EndpointHeader';
 import { EndpointParameters } from './EndpointParameters';
 import { EndpointResponses } from './EndpointResponses';
@@ -40,9 +41,10 @@ export const EndpointRow: React.FC<EndpointRowProps> = ({
             <h4 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
               {t('requestBodySchema')}
             </h4>
+            <EndpointContentDetails content={endpoint.spec.requestBody?.content} />
             <textarea
               className="w-full p-3 font-mono text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-zinc-900 text-neutral-800 dark:text-neutral-200 rounded-xs outline-none focus:ring-1 focus:ring-neutral-400 resize-y leading-relaxed shadow-inner"
-              placeholder='{\n  "property": "value"\n}'
+              placeholder={'{\n  "property": "value"\n}'}
               rows={5}
               value={requestBody}
               onChange={(e) => onBodyChange(e.target.value)}

@@ -9,13 +9,9 @@ export interface ParameterSpec {
 }
 
 export interface ResponseContentSpec {
-  schema?: {
-    type?: string;
-    items?: {
-      $ref?: string;
-    };
-    $ref?: string;
-  };
+  schema?: Record<string, unknown>;
+  example?: unknown;
+  examples?: Record<string, { summary?: string; description?: string; value?: unknown } | unknown>;
 }
 
 export interface OperationSpec {
@@ -23,6 +19,7 @@ export interface OperationSpec {
   summary?: string;
   parameters?: ParameterSpec[];
   requestBody?: {
+    required?: boolean;
     content?: Record<string, ResponseContentSpec>;
   };
   responses?: Record<

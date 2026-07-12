@@ -118,7 +118,10 @@
       "responsesMatrix": "Матрица ответов (Responses)",
       "parameters": "Параметры",
       "paramIn": "в {location}",
-      "placeholderParam": "Введите значение ({type})"
+      "placeholderParam": "Введите значение ({type})",
+      "contentType": "Content-Type",
+      "schema": "Schema",
+      "example": "Example"
     },
     "ResponseConsole": {
       "diagnostics": "Диагностика сервера:",

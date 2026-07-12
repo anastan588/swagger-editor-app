@@ -116,7 +116,10 @@
       "responsesMatrix": "Responses Matrix",
       "parameters": "Parameters",
       "paramIn": "in {location}",
-      "placeholderParam": "Enter value ({type})"
+      "placeholderParam": "Enter value ({type})",
+      "contentType": "Content-Type",
+      "schema": "Schema",
+      "example": "Example"
     },
     "ResponseConsole": {
       "diagnostics": "Server Diagnostics:",
