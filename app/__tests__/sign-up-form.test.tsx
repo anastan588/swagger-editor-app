@@ -71,6 +71,34 @@ describe('SignUpForm', () => {
     expect(mocks.signUp).not.toHaveBeenCalled();
   });
 
+  it('shows field validation errors after fields lose focus before submit', async () => {
+    render(<SignUpForm />);
+
+    const emailInput = screen.getByLabelText('Auth.email');
+    const passwordInput = screen.getByLabelText('Auth.password');
+
+    fireEvent.change(emailInput, { target: { value: 'not-an-email' } });
+
+    expect(screen.queryByText('Auth.errors.invalidEmail')).not.toBeInTheDocument();
+
+    fireEvent.blur(emailInput);
+
+    await waitFor(() => {
+      expect(screen.getByText('Auth.errors.invalidEmail')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText('Auth.errors.passwordMin')).not.toBeInTheDocument();
+
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
+    fireEvent.blur(passwordInput);
+
+    await waitFor(() => {
+      expect(screen.getByText('Auth.errors.passwordMin')).toBeInTheDocument();
+    });
+
+    expect(mocks.signUp).not.toHaveBeenCalled();
+  });
+
   it('shows passwordMin error when password is too short', async () => {
     render(<SignUpForm />);
 
