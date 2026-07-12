@@ -7,8 +7,13 @@ import { CodeEditor } from '@/app/components/CodeEditor';
 import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 
 const mockUseSchema = vi.fn();
-vi.mock('@/app/context/SchemaContext', () => ({
+const mockUseAuth = vi.fn();
+vi.mock('@/app/context/SchemaContextValue', () => ({
   useSchema: () => mockUseSchema(),
+}));
+
+vi.mock('@/app/components/useAuth', () => ({
+  useAuth: () => mockUseAuth(),
 }));
 
 vi.mock('next-intl', () => ({
@@ -46,6 +51,7 @@ const mockShowOpenFilePicker = vi.fn();
 describe('CodeEditor Component', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    mockUseAuth.mockReturnValue({ isAuthenticated: true });
     vi.stubGlobal('window', {
       showOpenFilePicker: mockShowOpenFilePicker,
     });
@@ -88,6 +94,24 @@ describe('CodeEditor Component', () => {
     expect(screen.getByText('Syntax Error Line 1')).toBeInTheDocument();
     expect(screen.getByText('Missing Field')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'saveSchemaBtn' })).toBeEnabled();
+  });
+
+  it('disables schema saving for non-authenticated users', () => {
+    mockUseAuth.mockReturnValue({ isAuthenticated: false });
+    mockUseSchema.mockReturnValue({
+      schema: 'openapi: 3.0.0',
+      setSchema: vi.fn(),
+      format: 'yaml',
+      toggleFormat: vi.fn(),
+      isValid: true,
+      isSaved: false,
+      errors: [],
+      saveSchema: vi.fn(),
+    });
+
+    render(<CodeEditor />);
+
+    expect(screen.getByRole('button', { name: 'signInToSaveBtn' })).toBeDisabled();
   });
 
   it('triggers asynchronous file selector streaming pipelines when load file option click', async () => {

@@ -43,7 +43,7 @@ describe('SwaggerViewerParser Utilities', () => {
       expect(parseYamlSchema('string')).toEqual({});
     });
 
-    it('logs error and rethrows when yaml parsing throws an exception', () => {
+    it('rethrows yaml parsing exceptions without writing console errors', () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const mockError = new Error('Syntax error');
       vi.mocked(parse).mockImplementation(() => {
@@ -51,7 +51,7 @@ describe('SwaggerViewerParser Utilities', () => {
       });
 
       expect(() => parseYamlSchema('invalid: yaml:')).toThrow(mockError);
-      expect(consoleSpy).toHaveBeenCalled();
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -138,6 +138,7 @@ describe('SwaggerViewerParser Utilities', () => {
           { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
           { name: 'role', in: 'query', required: false, schema: { type: 'string' } },
           { name: 'X-Custom-Auth', in: 'header', required: false, schema: { type: 'string' } },
+          { name: 'session_id', in: 'cookie', required: false, schema: { type: 'string' } },
         ],
         responses: {},
       },
@@ -156,6 +157,19 @@ describe('SwaggerViewerParser Utilities', () => {
       expect(result.cleanPathWithQuery).toBe('/users/123?role=admin');
       expect(result.fullAbsoluteUrl).toBe('https://api.com/users/123?role=admin');
       expect(result.headers).toEqual({ 'X-Custom-Auth': 'secret-token' });
+    });
+
+    it('maps cookie parameters into a Cookie header for proxied execution', () => {
+      const result = compileRequestDetails(
+        mockEndpoint,
+        {
+          id: '123',
+          session_id: 'abc 123',
+        },
+        'https://api.com',
+      );
+
+      expect(result.headers).toEqual({ Cookie: 'session_id=abc%20123' });
     });
 
     it('encodes values to safely insert path parameter matrices', () => {

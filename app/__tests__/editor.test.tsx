@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import EditorPage from '@/app/[locale]/editor/page';
-import { AuthContext } from '@/app/context/AuthProvider';
+import { AuthContext } from '@/app/context/AuthContext';
 
 const mocks = vi.hoisted(() => ({
   getClaims: vi.fn(),

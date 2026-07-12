@@ -3,6 +3,53 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ProxyBodyPayload } from '@/app/components/swagger/types';
 import { updateSession } from '@/lib/supabase/proxy';
 
+type SupabaseClient = Awaited<ReturnType<typeof updateSession>>['supabase'];
+
+interface TrackRequestHistoryOptions {
+  supabase: SupabaseClient;
+  userId: string;
+  method: string;
+  path: string;
+  targetHost: string;
+  requestBody: BodyInit | null | undefined;
+  responseStatus: number;
+  responseBodyText: string;
+  latencyMs: number;
+  errorDetails: string | null;
+}
+
+const trackRequestHistory = async ({
+  supabase,
+  userId,
+  method,
+  path,
+  targetHost,
+  requestBody,
+  responseStatus,
+  responseBodyText,
+  latencyMs,
+  errorDetails,
+}: TrackRequestHistoryOptions): Promise<void> => {
+  const encoder = new TextEncoder();
+  const requestBodyText = typeof requestBody === 'string' ? requestBody : '';
+
+  await supabase
+    .from('request_history')
+    .insert({
+      user_id: userId,
+      method: method.toUpperCase(),
+      path,
+      target_host: targetHost,
+      request_size_bytes: encoder.encode(requestBodyText).length,
+      response_status: responseStatus,
+      response_size_bytes: encoder.encode(responseBodyText).length,
+      latency_ms: latencyMs,
+      error_details: errorDetails,
+      created_at: new Date().toISOString(),
+    })
+    .then(undefined, () => undefined);
+};
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const { isLoggedIn, userId, supabase } = await updateSession(request);
@@ -95,23 +142,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     if (isLoggedIn && userId) {
-      try {
-        const encoder = new TextEncoder();
-        await supabase.from('request_history').insert({
-          user_id: userId,
-          method: method.toUpperCase(),
-          path: cleanPath,
-          target_host: cleanBase,
-          request_size_bytes: fetchOptions.body ? encoder.encode(fetchOptions.body as string).length : 0,
-          response_status: proxyStatus,
-          response_size_bytes: encoder.encode(responseBodyText).length,
-          latency_ms: durationMs,
-          error_details: networkErrorDetails,
-          created_at: new Date().toISOString(),
-        });
-      } catch (trackError: unknown) {
-        console.error('History tracking error:', trackError);
-      }
+      await trackRequestHistory({
+        supabase,
+        userId,
+        method,
+        path: cleanPath,
+        targetHost: cleanBase,
+        requestBody: fetchOptions.body,
+        responseStatus: proxyStatus,
+        responseBodyText,
+        latencyMs: durationMs,
+        errorDetails: networkErrorDetails,
+      });
     }
 
     return NextResponse.json({

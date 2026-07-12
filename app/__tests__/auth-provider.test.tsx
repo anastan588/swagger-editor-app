@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AuthContext, AuthProvider } from '@/app/context/AuthProvider';
+import { AuthContext } from '@/app/context/AuthContext';
+import { AuthProvider } from '@/app/context/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
 
 type AuthContextValue = NonNullable<React.ContextType<typeof AuthContext>>;

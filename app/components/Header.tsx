@@ -15,7 +15,6 @@ const Header = () => {
   const { isAuthenticated, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const isEditorPage = pathname === '/';
   const isAboutPage = pathname === '/about';
 
   useEffect(() => {
@@ -49,10 +48,6 @@ const Header = () => {
           </Link>
 
           <nav className="flex items-center gap-2">
-            <Button asChild size="sm" variant={isEditorPage ? 'secondary' : 'ghost'}>
-              <Link href="/editor">{t('editor')}</Link>
-            </Button>
-
             <Button asChild size="sm" variant={isAboutPage ? 'secondary' : 'ghost'}>
               <Link href="/about">{t('about')}</Link>
             </Button>

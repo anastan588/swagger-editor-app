@@ -1,21 +1,15 @@
 'use client';
 
-import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { createClient } from '@/lib/supabase/client';
 
-interface AuthContextValue {
-  isAuthenticated: boolean;
-  userName: string | null;
-  signOut: () => Promise<void>;
-}
+import { AuthContext } from './AuthContext';
 
 interface AuthProviderProps {
   children: ReactNode;
   initialIsAuthenticated: boolean;
 }
-
-export const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthProvider = ({ children, initialIsAuthenticated }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);

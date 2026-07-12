@@ -60,7 +60,7 @@ describe('App Header', () => {
     render(<Header />);
 
     expect(screen.getByRole('link', { name: 'Header.logo' })).toHaveAttribute('href', '/');
-    expect(screen.getByRole('link', { name: 'Header.editor' })).toHaveAttribute('href', '/editor');
+    expect(screen.queryByRole('link', { name: 'Header.editor' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Header.about' })).toHaveAttribute('href', '/about');
     expect(screen.getByRole('link', { name: 'Header.signIn' })).toHaveAttribute('href', '/sign-in');
     expect(screen.getByRole('link', { name: 'Header.signUp' })).toHaveAttribute('href', '/sign-up');

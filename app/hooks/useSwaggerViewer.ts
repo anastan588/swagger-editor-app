@@ -4,8 +4,8 @@ import { useContext, useMemo, useState } from 'react';
 
 import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 import { FlattenedEndpoint, ResponseState } from '@/app/components/swagger/types';
-import { AuthContext } from '@/app/context/AuthProvider';
-import { useSchema } from '@/app/context/SchemaContext';
+import { AuthContext } from '@/app/context/AuthContext';
+import { useSchema } from '@/app/context/SchemaContextValue';
 import {
   compileRequestDetails,
   extractBaseUrl,

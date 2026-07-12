@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 
-import { AuthContext } from '@/app/context/AuthProvider';
+import { AuthContext } from '@/app/context/AuthContext';
 import { Link } from '@/i18n/navigation';
 
 const HomeInteractive = ({

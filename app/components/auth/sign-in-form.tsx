@@ -89,6 +89,7 @@ export const SignInForm = () => {
                     disabled={isSubmitting}
                     id="password"
                     placeholder={t('passwordPlaceholder')}
+                    type="password"
                   />
                 )}
               />

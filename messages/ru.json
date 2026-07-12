@@ -86,6 +86,7 @@
       "filePickerDescription": "Файлы спецификаций OpenAPI",
       "loadFileBtn": "Загрузить файл",
       "saveSchemaBtn": "Сохранить схему",
+      "signInToSaveBtn": "Войти для сохранения",
       "savedBtn": "Сохранено",
       "switchToBtn": "Перейти на {targetFormat}",
       "textareaPlaceholder": "Вставьте, введите или загрузите вашу спецификацию OpenAPI/Swagger (JSON/YAML) здесь...",
@@ -118,7 +119,10 @@
       "responsesMatrix": "Матрица ответов (Responses)",
       "parameters": "Параметры",
       "paramIn": "в {location}",
-      "placeholderParam": "Введите значение ({type})"
+      "placeholderParam": "Введите значение ({type})",
+      "contentType": "Content-Type",
+      "schema": "Schema",
+      "example": "Example"
     },
     "ResponseConsole": {
       "diagnostics": "Диагностика сервера:",

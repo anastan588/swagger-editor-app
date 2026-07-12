@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import HomeInteractive from '@/app/components/HomeInteractive';
-import { AuthContext } from '@/app/context/AuthProvider';
+import { AuthContext } from '@/app/context/AuthContext';
 
 vi.mock('@/i18n/navigation', () => ({
   Link: function MockLink({

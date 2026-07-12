@@ -38,7 +38,7 @@ const fillForm = (email: string, password: string, confirm: string) => {
   fireEvent.change(screen.getByLabelText('Auth.confirmPassword'), { target: { value: confirm } });
 };
 
-const getForm = () => screen.getByRole('button', { name: 'Auth.signInButton' }).closest('form')!;
+const getForm = () => screen.getByRole('button', { name: 'Auth.signUpButton' }).closest('form')!;
 
 describe('SignUpForm', () => {
   beforeEach(() => {
@@ -53,6 +53,9 @@ describe('SignUpForm', () => {
     expect(screen.getByLabelText('Auth.email')).toBeInTheDocument();
     expect(screen.getByLabelText('Auth.password')).toBeInTheDocument();
     expect(screen.getByLabelText('Auth.confirmPassword')).toBeInTheDocument();
+    expect(screen.getByLabelText('Auth.password')).toHaveAttribute('type', 'password');
+    expect(screen.getByLabelText('Auth.confirmPassword')).toHaveAttribute('type', 'password');
+    expect(screen.getByRole('button', { name: 'Auth.signUpButton' })).toBeInTheDocument();
   });
 
   it('shows invalidEmail error when email format is wrong', async () => {

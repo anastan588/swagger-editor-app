@@ -11,17 +11,12 @@ export function parseYamlSchema(schemaText: string): Record<string, unknown> {
     return {};
   }
 
-  try {
-    const parsed = parse(schemaText);
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-
-    return {};
-  } catch (error) {
-    console.error('YAML parsing failed:', error);
-    throw error;
+  const parsed = parse(schemaText);
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    return parsed as Record<string, unknown>;
   }
+
+  return {};
 }
 
 export function extractBaseUrl(parsedObject: Record<string, unknown> | null, manualFallbackUrl: string): string {
@@ -72,6 +67,7 @@ export function compileRequestDetails(endpoint: FlattenedEndpoint, inputs: Recor
   let finalPath = endpoint.path;
   const queryParams = new URLSearchParams();
   const headers: Record<string, string> = {};
+  const cookieParams: string[] = [];
 
   endpoint.spec.parameters?.forEach((param) => {
     const value = inputs[param.name] || '';
@@ -81,8 +77,14 @@ export function compileRequestDetails(endpoint: FlattenedEndpoint, inputs: Recor
       queryParams.set(param.name, value);
     } else if (param.in === 'header' && value) {
       headers[param.name] = value;
+    } else if (param.in === 'cookie' && value) {
+      cookieParams.push(`${param.name}=${encodeURIComponent(value)}`);
     }
   });
+
+  if (cookieParams.length > 0) {
+    headers.Cookie = cookieParams.join('; ');
+  }
 
   const queryString = queryParams.toString();
   const cleanPath = finalPath.startsWith('/') ? finalPath : `/${finalPath}`;
