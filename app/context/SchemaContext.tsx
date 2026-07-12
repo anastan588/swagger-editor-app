@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { ErrorToastContext } from '@/app/components/ErrorToastContext';
 import { AuthContext } from '@/app/context/AuthProvider';
@@ -21,17 +21,47 @@ interface SchemaContextValue {
 }
 
 const SchemaContext = createContext<SchemaContextValue | null>(null);
+const SCHEMA_DRAFT_STORAGE_KEY = 'swagger-editor-schema-draft';
+
+const readSchemaDraft = () => {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  try {
+    return window.localStorage.getItem(SCHEMA_DRAFT_STORAGE_KEY) ?? '';
+  } catch {
+    return '';
+  }
+};
+
+const writeSchemaDraft = (value: string) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    if (value.trim()) {
+      window.localStorage.setItem(SCHEMA_DRAFT_STORAGE_KEY, value);
+    } else {
+      window.localStorage.removeItem(SCHEMA_DRAFT_STORAGE_KEY);
+    }
+  } catch {
+    return;
+  }
+};
 
 export const SchemaProvider = ({ children, initialSchema }: { children: React.ReactNode; initialSchema: string }) => {
   const auth = useContext(AuthContext);
   const errorToast = useContext(ErrorToastContext);
   const isAuthenticated = auth?.isAuthenticated ?? false;
 
-  const [schema, setSchemaState] = useState<string>(initialSchema);
+  const [initialEditorSchema] = useState(() => (initialSchema.trim() ? initialSchema : readSchemaDraft()));
+  const [schema, setSchemaState] = useState<string>(initialEditorSchema);
 
   const parsedInitial = React.useMemo(() => {
-    return parseInitialSchema(initialSchema);
-  }, [initialSchema]);
+    return parseInitialSchema(initialEditorSchema);
+  }, [initialEditorSchema]);
 
   const [format, setFormat] = useState<'json' | 'yaml'>(parsedInitial.format);
   const [isValid, setIsValid] = useState<boolean>(parsedInitial.isValid);
@@ -39,9 +69,9 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
   const [endpoints, setEndpoints] = useState<Array<{ path: string; method: string }>>(parsedInitial.endpoints);
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
-  const setSchema = (value: string) => {
+  const applySchemaState = (value: string, saved: boolean) => {
     setSchemaState(value);
-    setIsSaved(false);
+    setIsSaved(saved);
 
     if (!value || !value.trim()) {
       setIsValid(false);
@@ -55,6 +85,17 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
     setIsValid(parsedData.isValid);
     setErrors(parsedData.errors);
     setEndpoints(parsedData.endpoints);
+  };
+
+  useEffect(() => {
+    if (initialSchema.trim()) {
+      writeSchemaDraft(initialSchema);
+    }
+  }, [initialSchema]);
+
+  const setSchema = (value: string) => {
+    writeSchemaDraft(value);
+    applySchemaState(value, false);
   };
 
   const saveSchema = async () => {
@@ -86,6 +127,7 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
           return;
         }
 
+        writeSchemaDraft(trimmedSchema);
         setIsSaved(true);
       } else {
         const { error } = await supabase.from('schemas').delete().eq('user_id', user.id);
@@ -95,6 +137,7 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
           return;
         }
 
+        writeSchemaDraft('');
         setSchemaState('');
         setIsSaved(true);
       }
@@ -109,10 +152,12 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
     try {
       if (format === 'json') {
         const yamlResult = jsonToYaml(schema);
+        writeSchemaDraft(yamlResult);
         setSchemaState(yamlResult);
         setFormat('yaml');
       } else {
         const jsonResult = yamlToJson(schema);
+        writeSchemaDraft(jsonResult);
         setSchemaState(jsonResult);
         setFormat('json');
       }

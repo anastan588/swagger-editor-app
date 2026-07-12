@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ErrorToastContext } from '@/app/components/ErrorToastContext';
@@ -80,6 +80,7 @@ describe('SchemaProvider', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
+    window.localStorage.clear();
     vi.mocked(parseInitialSchema).mockReturnValue(mockParsedData as ReturnType<typeof parseInitialSchema>);
   });
 
@@ -143,6 +144,16 @@ describe('SchemaProvider', () => {
 
     expect(screen.getByTestId('schema').textContent).toBe('new-schema');
     expect(parseInitialSchema).toHaveBeenCalledTimes(2);
+  });
+
+  it('should restore draft schema from localStorage when initial schema is empty', async () => {
+    window.localStorage.setItem('swagger-editor-schema-draft', 'draft-schema');
+
+    renderWithProviders('', createMockAuthContext(false));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('schema').textContent).toBe('draft-schema');
+    });
   });
 
   it('should clear validation state if updated schema string is empty', () => {
