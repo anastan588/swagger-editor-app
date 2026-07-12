@@ -101,13 +101,13 @@ describe('SchemaProvider', () => {
     expect(screen.getByTestId('endpoints').textContent).toContain('/api/v1');
   });
 
-  it('should clear and hide state variables when user is not authenticated', () => {
+  it('should expose local editor state when user is not authenticated', () => {
     renderWithProviders('{"key": "value"}', createMockAuthContext(false));
 
-    expect(screen.getByTestId('schema').textContent).toBe('');
-    expect(screen.getByTestId('isValid').textContent).toBe('false');
+    expect(screen.getByTestId('schema').textContent).toBe('{"key": "value"}');
+    expect(screen.getByTestId('isValid').textContent).toBe('true');
     expect(screen.getByTestId('errors').textContent).toBe('[]');
-    expect(screen.getByTestId('endpoints').textContent).toBe('[]');
+    expect(screen.getByTestId('endpoints').textContent).toContain('/api/v1');
   });
 
   it('should update schema and recalculate parsed variables on change', () => {
@@ -134,15 +134,15 @@ describe('SchemaProvider', () => {
     expect(screen.getByTestId('errors').textContent).toContain('Syntax error');
   });
 
-  it('should ignore schema changes if user is unauthenticated', () => {
+  it('should update local schema changes if user is unauthenticated', () => {
     renderWithProviders('initial', createMockAuthContext(false));
 
     act(() => {
       screen.getByTestId('set-btn').click();
     });
 
-    expect(screen.getByTestId('schema').textContent).toBe('');
-    expect(parseInitialSchema).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('schema').textContent).toBe('new-schema');
+    expect(parseInitialSchema).toHaveBeenCalledTimes(2);
   });
 
   it('should clear validation state if updated schema string is empty', () => {

@@ -14,32 +14,17 @@ vi.mock('@/i18n/navigation', () => ({
   usePathname: () => '/',
 }));
 
-vi.mock('next-intl', () => ({
-  useTranslations:
-    () =>
-    (key: string): string =>
-      `mocked_${key}`,
-}));
-
-vi.mock('@/app/components/HomeInteractive', () => ({
-  default: function MockHomeInteractive({ welcome }: { welcome: string }) {
-    return <h1 data-testid="mock-welcome">{welcome}</h1>;
+vi.mock('@/app/components/EditorPageShell', () => ({
+  EditorPageShell: async () => {
+    return <section data-testid="editor-page-shell">Editor workspace</section>;
   },
 }));
 
 describe('Home Component (SSR Page Layout)', () => {
-  it('renders the base layout structure and passes translations correctly', async () => {
-    const { container } = render(await Home());
+  it('renders the editor workspace on the main route', async () => {
+    render(await Home());
 
-    const wrapper = container.querySelector('.max-w-3xl');
-    expect(wrapper).toBeInTheDocument();
-
-    const decorativeLine = container.querySelector('.mb-6');
-    expect(decorativeLine).toBeInTheDocument();
-    expect(decorativeLine).toHaveClass('bg-black', 'dark:bg-white');
-
-    const welcomeText = screen.getByTestId('mock-welcome');
-    expect(welcomeText).toBeInTheDocument();
-    expect(welcomeText).toHaveTextContent('mocked_welcome');
+    expect(screen.getByTestId('editor-page-shell')).toBeInTheDocument();
+    expect(screen.getByText('Editor workspace')).toBeInTheDocument();
   });
 });

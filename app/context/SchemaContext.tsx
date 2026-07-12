@@ -39,14 +39,7 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
   const [endpoints, setEndpoints] = useState<Array<{ path: string; method: string }>>(parsedInitial.endpoints);
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
-  const currentSchema = isAuthenticated ? schema : '';
-  const currentIsValid = isAuthenticated ? isValid : false;
-  const currentErrors = isAuthenticated ? errors : [];
-  const currentEndpoints = isAuthenticated ? endpoints : [];
-
   const setSchema = (value: string) => {
-    if (!isAuthenticated) return;
-
     setSchemaState(value);
     setIsSaved(false);
 
@@ -111,15 +104,15 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
   };
 
   const toggleFormat = () => {
-    if (!isAuthenticated || !currentIsValid || !currentSchema.trim()) return;
+    if (!isValid || !schema.trim()) return;
 
     try {
       if (format === 'json') {
-        const yamlResult = jsonToYaml(currentSchema);
+        const yamlResult = jsonToYaml(schema);
         setSchemaState(yamlResult);
         setFormat('yaml');
       } else {
-        const jsonResult = yamlToJson(currentSchema);
+        const jsonResult = yamlToJson(schema);
         setSchemaState(jsonResult);
         setFormat('json');
       }
@@ -134,14 +127,14 @@ export const SchemaProvider = ({ children, initialSchema }: { children: React.Re
   return (
     <SchemaContext.Provider
       value={{
-        schema: currentSchema,
+        schema,
         setSchema,
         format,
         toggleFormat,
-        isValid: currentIsValid,
+        isValid,
         isSaved,
-        errors: currentErrors,
-        endpoints: currentEndpoints,
+        errors,
+        endpoints,
         saveSchema,
       }}
     >

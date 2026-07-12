@@ -6,7 +6,7 @@ import { updateSession } from './lib/supabase/proxy';
 
 const intlMiddleware = createMiddleware(routing);
 
-const privateRoutes = ['/history', '/editor']; //TODO check which routes are private
+const privateRoutes = ['/history'];
 const authRoutes = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
