@@ -91,6 +91,7 @@ export const SignUpForm = () => {
                     disabled={isSubmitting}
                     id="password"
                     placeholder={t('passwordPlaceholder')}
+                    type="password"
                   />
                 )}
               />
@@ -116,6 +117,7 @@ export const SignUpForm = () => {
                     disabled={isSubmitting}
                     id="confirmPassword"
                     placeholder={t('passwordPlaceholder')}
+                    type="password"
                   />
                 )}
               />
@@ -129,7 +131,7 @@ export const SignUpForm = () => {
             </Field>
           </FieldGroup>
           <Button className="w-full" disabled={isSubmitting} type="submit">
-            {isSubmitting ? '...' : t('signInButton')}
+            {isSubmitting ? '...' : t('signUpButton')}
           </Button>
           <p className="text-center">
             {t('hasAccount')}{' '}
@@ -140,65 +142,5 @@ export const SignUpForm = () => {
         </form>
       </CardContent>
     </Card>
-    // <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit(onSubmit)}>
-    //   <h1>{t('signUpTitle')}</h1>
-    //   {serverError ? <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">{serverError}</div> : null}
-    //   <div className="flex flex-col gap-1">
-    //     <label htmlFor="email">{t('email')}</label>
-    //     <input
-    //       {...register('email')}
-    //       className="border rounded-md px-3 py-2"
-    //       id="email"
-    //       placeholder={t('emailPlaceholder')}
-    //       type="email"
-    //     />
-    //     {errors.email ? (
-    //       <span className="text-red-500 text-xs">{t(`errors.${errors.email.message}` as Parameters<typeof t>[0])}</span>
-    //     ) : null}
-    //   </div>
-
-    //   <div className="flex flex-col gap-1">
-    //     <label htmlFor="password">{t('password')}</label>
-    //     <input
-    //       {...register('password')}
-    //       className="border rounded-md px-3 py-2"
-    //       id="password"
-    //       placeholder={t('passwordPlaceholder')}
-    //       type="password"
-    //     />
-    //     {errors.password ? (
-    //       <span className="text-red-500 text-xs">
-    //         {t(`errors.${errors.password.message}` as Parameters<typeof t>[0])}
-    //       </span>
-    //     ) : null}
-    //   </div>
-
-    //   <div className="flex flex-col gap-1">
-    //     <label htmlFor="password">{t('confirmPassword')}</label>
-    //     <input
-    //       {...register('confirmPassword')}
-    //       className="border rounded-md px-3 py-2"
-    //       id="confirmPassword"
-    //       placeholder={t('passwordPlaceholder')}
-    //       type="password"
-    //     />
-    //     {errors.confirmPassword ? (
-    //       <span className="text-red-500 text-xs">
-    //         {t(`errors.${errors.confirmPassword.message}` as Parameters<typeof t>[0])}
-    //       </span>
-    //     ) : null}
-    //   </div>
-
-    //   <Button className="w-full" disabled={isSubmitting} type="submit">
-    //     {isSubmitting ? '...' : t('signUpButton')}
-    //   </Button>
-
-    //   <p className="text-center">
-    //     {t('hasAccount')}{' '}
-    //     <Link className="text-blue-600 hover:underline" href="/sign-in">
-    //       {t('signIn')}
-    //     </Link>
-    //   </p>
-    // </form>
   );
 };
