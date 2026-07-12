@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
-import { useSchema } from '@/app/context/SchemaContext';
+import { useSchema } from '@/app/context/SchemaContextValue';
 import { useSwaggerViewer } from '@/app/hooks/useSwaggerViewer';
 import { Input } from '@/components/ui/input';
 

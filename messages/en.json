@@ -84,6 +84,7 @@
       "filePickerDescription": "OpenAPI Specification Files",
       "loadFileBtn": "Load File",
       "saveSchemaBtn": "Save Schema",
+      "signInToSaveBtn": "Sign in to save",
       "savedBtn": "Saved",
       "switchToBtn": "Switch to {targetFormat}",
       "textareaPlaceholder": "Paste, type, or load your OpenAPI/Swagger specification (JSON/YAML) here...",

@@ -37,7 +37,7 @@ vi.mock('@/app/hooks/useSwaggerViewer', () => ({
 }));
 
 const mockSchemaContext = vi.fn<() => SchemaContextState>();
-vi.mock('@/app/context/SchemaContext', () => ({
+vi.mock('@/app/context/SchemaContextValue', () => ({
   useSchema: () => mockSchemaContext(),
 }));
 

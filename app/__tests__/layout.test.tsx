@@ -27,7 +27,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('next-intl', () => ({
-  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => children,
   useTranslations: () => (key: string) => key,
 }));
 

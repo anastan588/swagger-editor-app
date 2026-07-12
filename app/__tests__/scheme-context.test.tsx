@@ -3,8 +3,9 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ErrorToastContext } from '@/app/components/ErrorToastContext';
-import { AuthContext } from '@/app/context/AuthProvider';
-import { SchemaProvider, useSchema } from '@/app/context/SchemaContext';
+import { AuthContext } from '@/app/context/AuthContext';
+import { SchemaProvider } from '@/app/context/SchemaContext';
+import { useSchema } from '@/app/context/SchemaContextValue';
 import { parseInitialSchema } from '@/app/utils/schemaParser';
 import { jsonToYaml, yamlToJson } from '@/app/utils/yamlCompiler';
 import { createClient } from '@/lib/supabase/client';
@@ -144,15 +145,29 @@ describe('SchemaProvider', () => {
 
     expect(screen.getByTestId('schema').textContent).toBe('new-schema');
     expect(parseInitialSchema).toHaveBeenCalledTimes(2);
+    expect(window.localStorage.getItem('swagger-editor-schema-draft')).toBeNull();
   });
 
-  it('should restore draft schema from localStorage when initial schema is empty', async () => {
+  it('should not restore draft schema from localStorage when user is unauthenticated', async () => {
     window.localStorage.setItem('swagger-editor-schema-draft', 'draft-schema');
 
     renderWithProviders('', createMockAuthContext(false));
 
     await waitFor(() => {
+      expect(window.localStorage.getItem('swagger-editor-schema-draft')).toBeNull();
+    });
+    expect(screen.getByTestId('schema').textContent).toBe('');
+    expect(screen.getByTestId('isSaved').textContent).toBe('true');
+  });
+
+  it('should restore draft schema from localStorage as unsaved when user is authenticated', async () => {
+    window.localStorage.setItem('swagger-editor-schema-draft', 'draft-schema');
+
+    renderWithProviders('');
+
+    await waitFor(() => {
       expect(screen.getByTestId('schema').textContent).toBe('draft-schema');
+      expect(screen.getByTestId('isSaved').textContent).toBe('false');
     });
   });
 
