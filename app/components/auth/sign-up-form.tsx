@@ -18,15 +18,23 @@ export const SignUpForm = () => {
   const t = useTranslations('Auth');
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [blurredFields, setBlurredFields] = useState<Partial<Record<keyof SignUpFormData, boolean>>>({});
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitted, isSubmitting },
   } = useForm<SignUpFormData>({
     defaultValues: { email: '', password: '', confirmPassword: '' },
-    mode: 'onSubmit',
+    mode: 'onChange',
     resolver: zodResolver(signUpSchema),
   });
+  const emailError = blurredFields.email || isSubmitted ? errors.email : undefined;
+  const passwordError = blurredFields.password || isSubmitted ? errors.password : undefined;
+  const confirmPasswordError = blurredFields.confirmPassword || isSubmitted ? errors.confirmPassword : undefined;
+
+  const markFieldAsBlurred = (name: keyof SignUpFormData) => {
+    setBlurredFields((currentFields) => ({ ...currentFields, [name]: true }));
+  };
 
   const onSubmit = async (data: SignUpFormData) => {
     setServerError(null);
@@ -54,7 +62,7 @@ export const SignUpForm = () => {
         <form className="flex flex-col gap-2 w-full" onSubmit={handleSubmit(onSubmit)}>
           {serverError ? <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">{serverError}</div> : null}
           <FieldGroup>
-            <Field data-invalid={!!errors.email}>
+            <Field data-invalid={!!emailError}>
               <FieldLabel className="text-x1 font-semibold" htmlFor="email">
                 {t('email')}
               </FieldLabel>
@@ -64,20 +72,24 @@ export const SignUpForm = () => {
                 render={({ field }) => (
                   <Input
                     {...field}
-                    aria-invalid={!!errors.email}
+                    aria-invalid={!!emailError}
                     disabled={isSubmitting}
                     id="email"
                     placeholder={t('emailPlaceholder')}
+                    onBlur={() => {
+                      field.onBlur();
+                      markFieldAsBlurred('email');
+                    }}
                   />
                 )}
               />
               <FieldDescription>
-                {errors.email ? (
-                  <span className="text-red-500">{t(`errors.${errors.email.message}` as Parameters<typeof t>[0])}</span>
+                {emailError ? (
+                  <span className="text-red-500">{t(`errors.${emailError.message}` as Parameters<typeof t>[0])}</span>
                 ) : null}
               </FieldDescription>
             </Field>
-            <Field data-invalid={!!errors.password}>
+            <Field data-invalid={!!passwordError}>
               <FieldLabel className="text-x1 font-semibold" htmlFor="password">
                 {t('password')}
               </FieldLabel>
@@ -87,23 +99,27 @@ export const SignUpForm = () => {
                 render={({ field }) => (
                   <Input
                     {...field}
-                    aria-invalid={!!errors.password}
+                    aria-invalid={!!passwordError}
                     disabled={isSubmitting}
                     id="password"
                     placeholder={t('passwordPlaceholder')}
                     type="password"
+                    onBlur={() => {
+                      field.onBlur();
+                      markFieldAsBlurred('password');
+                    }}
                   />
                 )}
               />
               <FieldDescription>
-                {errors.password ? (
+                {passwordError ? (
                   <span className="text-red-500">
-                    {t(`errors.${errors.password.message}` as Parameters<typeof t>[0])}
+                    {t(`errors.${passwordError.message}` as Parameters<typeof t>[0])}
                   </span>
                 ) : null}
               </FieldDescription>
             </Field>
-            <Field data-invalid={!!errors.confirmPassword}>
+            <Field data-invalid={!!confirmPasswordError}>
               <FieldLabel className="text-x1 font-semibold" htmlFor="confirmPassword">
                 {t('confirmPassword')}
               </FieldLabel>
@@ -113,18 +129,22 @@ export const SignUpForm = () => {
                 render={({ field }) => (
                   <Input
                     {...field}
-                    aria-invalid={!!errors.confirmPassword}
+                    aria-invalid={!!confirmPasswordError}
                     disabled={isSubmitting}
                     id="confirmPassword"
                     placeholder={t('passwordPlaceholder')}
                     type="password"
+                    onBlur={() => {
+                      field.onBlur();
+                      markFieldAsBlurred('confirmPassword');
+                    }}
                   />
                 )}
               />
               <FieldDescription>
-                {errors.confirmPassword ? (
+                {confirmPasswordError ? (
                   <span className="text-red-500">
-                    {t(`errors.${errors.confirmPassword.message}` as Parameters<typeof t>[0])}
+                    {t(`errors.${confirmPasswordError.message}` as Parameters<typeof t>[0])}
                   </span>
                 ) : null}
               </FieldDescription>
