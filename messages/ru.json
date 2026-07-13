@@ -1,0 +1,156 @@
+{
+  "HomePage": {
+    "welcomeBack": "С возвращением",
+    "welcome": "Приветствуем.",
+    "authSubtitle": "Рады видеть вас снова. Ваш персональный дашборд готов к работе.",
+    "guestSubtitle": "Откройте для себя минималистичное пространство для продуктивности.",
+    "dashboardBtn": "В Swagger Editor",
+    "getStartedBtn": "Начать работу",
+    "workspaceTitle": "Рабочая область Swagger",
+    "workspaceAuthDesc": "Доступ к полной истории проектирования и сохраненным спецификациям.",
+    "workspaceGuestDesc": "Войдите или зарегистрируйтесь, чтобы сохранять историю проектирования API.",
+    "historyLink": "История запросов"
+  },
+  "Header": {
+    "logo": "Swagger Editor",
+    "editor": "Редактор",
+    "about": "О проекте",
+    "history": "История",
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "signOut": "Выйти"
+  },
+  "Footer": {
+    "created": "Создано в 2026 году для курса RS School React",
+    "about": "О Swagger Editor App"
+  },
+  "AboutPage": {
+    "title": "О Swagger Editor App",
+    "description": "Swagger Editor App — финальный проект курса RS School React. Приложение предназначено для работы со спецификациями Swagger и OpenAPI: редактирования, просмотра и управления историей запросов.",
+    "course": {
+      "title": "Курс RS School",
+      "description": "RS School — бесплатная образовательная программа сообщества, посвящённая современной веб-разработке. Этот проект создан в рамках финального задания курса React.",
+      "link": "Сайт RS School"
+    },
+    "resources": {
+      "title": "Ресурсы проекта",
+      "description": "Здесь можно посмотреть исходный код проекта и оригинальные требования финального задания RS School.",
+      "repository": "Репозиторий проекта",
+      "task": "Описание финального задания"
+    },
+    "team": {
+      "title": "Команда разработки",
+      "roles": {
+        "teamLead": "Тимлид",
+        "developer": "Разработчик"
+      }
+    },
+    "technologies": "Технологии"
+  },
+  "ErrorPage": {
+    "title": "Что-то пошло не так",
+    "description": "Не удалось загрузить страницу. Попробуйте ещё раз.",
+    "tryAgain": "Повторить"
+  },
+  "Auth": {
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "email": "Адрес электронной почты",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "Минимум 8 символов, (буквы, цифры, спецсимволы)",
+    "signInTitle": "С возвращением",
+    "signUpTitle": "Создать аккаунт",
+    "signInButton": "Войти",
+    "signUpButton": "Создать аккаунт",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "errors": {
+      "invalidEmail": "Введите корректный email",
+      "passwordMin": "Пароль должен быть не менее 8 символов",
+      "passwordLetter": "Пароль должен содержать хотя бы одну букву",
+      "passwordDigit": "Пароль должен содержать хотя бы одну цифру",
+      "passwordSpecial": "Пароль должен содержать хотя бы один спецсимвол",
+      "passwordMatch": "Пароли не совпадают",
+      "invalidCredentials": "Неверный email или пароль",
+      "emailTaken": "Этот email уже зарегистрирован",
+      "common": "Что-то пошло не так. Попробуйте снова."
+    }
+  },
+  "EditorPage": {
+    "workspaceTitle": "Студия Проектирования API",
+    "workspaceSubtitle": "Проектируйте, валидируйте и просматривайте интерактивные спецификации OpenAPI в реальном времени.",
+    "CodeEditor": {
+      "title": "Редактор ({format})",
+      "filePickerDescription": "Файлы спецификаций OpenAPI",
+      "loadFileBtn": "Загрузить файл",
+      "saveSchemaBtn": "Сохранить схему",
+      "signInToSaveBtn": "Войти для сохранения",
+      "savedBtn": "Сохранено",
+      "switchToBtn": "Перейти на {targetFormat}",
+      "textareaPlaceholder": "Вставьте, введите или загрузите вашу спецификацию OpenAPI/Swagger (JSON/YAML) здесь...",
+      "validSchemaMsg": "Валидная спецификация OpenAPI. Эндпоинты синхронизированы с просмотрщиком.",
+      "invalidSchemaTitle": "Ошибка валидации спецификации схемы:",
+      "emptySchemaMsg": "Схема не предоставлена или разметка пуста",
+      "loadFileError": "Не удалось загрузить выбранный файл. Попробуйте другой JSON или YAML файл.",
+      "saveSchemaError": "Не удалось сохранить схему. Попробуйте ещё раз."
+    },
+    "EditorSkeleton": {
+      "loadingTitle": "Инициализация рабочей области",
+      "loadingDescription": "Восстановление ваших последних сохраненных данных конфигурации OpenAPI из локального хранилища..."
+    },
+    "CompilerErrors": {
+      "jsonToYamlFailed": "Не удалось преобразовать структуру JSON в формат YAML.",
+      "yamlToJsonFailed": "Неверная синтаксическая структура YAML."
+    },
+    "SwaggerViewer": {
+      "serverTargetHost": "Активный целевой хост сервера (вычислен из схемы или изменен вручную):",
+      "placeholderHost": "например, https://wizardworldapi.com",
+      "awaitingConfig": "Ожидание корректной конфигурации для генерации интерактивной документации...",
+      "detected": "Обнаружен {format}"
+    },
+    "EndpointRow": {
+      "requestBodySchema": "Схема тела запроса (Request Body)",
+      "executing": "Выполнение...",
+      "executeRequest": "Выполнить запрос",
+      "copied": "Скопировано!",
+      "generateCurl": "Сгенерировать cURL",
+      "responsesMatrix": "Матрица ответов (Responses)",
+      "parameters": "Параметры",
+      "paramIn": "в {location}",
+      "placeholderParam": "Введите значение ({type})",
+      "contentType": "Content-Type",
+      "schema": "Schema",
+      "example": "Example"
+    },
+    "ResponseConsole": {
+      "diagnostics": "Диагностика сервера:",
+      "latency": "Задержка: {ms} мс",
+      "length": "Размер: {size}",
+      "type": "Тип: {type}",
+      "tracer": "Трассировщик хоста:",
+      "bodyTab": "Тело ответа",
+      "headersTab": "Заголовки ({count})",
+      "noBody": "Целевой сервер вернул пустой ответ (нет тела payload).",
+      "thField": "Поле заголовка",
+      "thValue": "Значение заголовка",
+      "noHeaders": "Метаданные или индексы сопоставления заголовков не найдены.",
+      "yamlError": "Не удалось преобразовать структуру JSON-ответа в формат YAML.",
+      "copy": "Копировать JSON",
+      "copied": "Скопировано!"
+    }
+  },
+  "HistoryPage": {
+    "title": "История запросов и аналитика",
+    "loading": "Загрузка истории...",
+    "emptyDescription": "Вы ещё не выполнили ни одного запроса.",
+    "goToEditor": "Перейти в редактор",
+    "goToViewer": "Перейти во вьювер",
+    "statusCode": "Код ответа сервера",
+    "latency": "Задержка",
+    "requestSize": "Размер запроса",
+    "responseSize": "Размер ответа",
+    "error": "Ошибка"
+  }
+}
