@@ -1,11 +1,5 @@
 # 🖋️ Swagger Editor App
 
-[![Production Deployment](https://shields.io)](https://swagger-editor-404-team.vercel.app/)
-[![Next.js](https://shields.io)](https://nextjs.org)
-[![React](https://shields.io)](https://react.dev)
-[![Tailwind v4](https://shields.io)](https://tailwindcss.com)
-[![Vitest](https://shields.io)](https://vitest.dev)
-
 A modern, cloud-synced Web Application for editing, validating, and managing Swagger/OpenAPI specifications. Built with performance, accessibility, and clean architecture in mind.
 
 🔗 **Live Production URL**: [https://swagger-editor-404-team.vercel.app/](https://swagger-editor-404-team.vercel.app/)
