@@ -5,6 +5,83 @@ import { updateSession } from '@/lib/supabase/proxy';
 
 type SupabaseClient = Awaited<ReturnType<typeof updateSession>>['supabase'];
 
+const MAX_ERROR_DETAILS_LENGTH = 500;
+
+const extractMessageFromJsonBody = (parsed: unknown): string | null => {
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    return null;
+  }
+
+  const record = parsed as Record<string, unknown>;
+  const candidates = ['message', 'error', 'detail', 'title', 'error_description'];
+
+  for (const key of candidates) {
+    const value = record[key];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+};
+
+const truncateErrorDetails = (value: string): string => {
+  if (value.length <= MAX_ERROR_DETAILS_LENGTH) {
+    return value;
+  }
+
+  return `${value.slice(0, MAX_ERROR_DETAILS_LENGTH)}…`;
+};
+
+const resolveHttpErrorDetails = (status: number, responseBodyText: string, statusText = ''): string => {
+  const trimmedBody = responseBodyText.trim();
+
+  if (trimmedBody) {
+    try {
+      const parsed = JSON.parse(trimmedBody) as unknown;
+      const jsonMessage = extractMessageFromJsonBody(parsed);
+      if (jsonMessage) {
+        return truncateErrorDetails(jsonMessage);
+      }
+    } catch {
+      // Response body is not JSON
+    }
+
+    return truncateErrorDetails(trimmedBody);
+  }
+
+  const trimmedStatusText = statusText.trim();
+  if (trimmedStatusText) {
+    return `HTTP ${status} ${trimmedStatusText}`;
+  }
+
+  return `HTTP ${status}`;
+};
+
+const resolveRequestErrorDetails = ({
+  proxyStatus,
+  responseBodyText,
+  statusText,
+  networkErrorDetails,
+  usedMockFallback,
+}: {
+  proxyStatus: number;
+  responseBodyText: string;
+  statusText: string;
+  networkErrorDetails: string | null;
+  usedMockFallback: boolean;
+}): string | null => {
+  if (networkErrorDetails) {
+    return networkErrorDetails;
+  }
+
+  if (usedMockFallback || proxyStatus < 400) {
+    return null;
+  }
+
+  return resolveHttpErrorDetails(proxyStatus, responseBodyText, statusText);
+};
+
 interface TrackRequestHistoryOptions {
   supabase: SupabaseClient;
   userId: string;
@@ -101,8 +178,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       signal: AbortSignal.timeout(4000),
     };
 
-    let targetResponse: Response;
+    let targetResponse: Response | undefined;
     let responseBodyText = '';
+    let responseStatusText = '';
     let usedMockFallback = false;
     let proxyStatus = 200;
     let networkErrorDetails: string | null = null;
@@ -111,6 +189,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       targetResponse = await fetch(finalDestinationUrl, fetchOptions);
       responseBodyText = await targetResponse.text();
       proxyStatus = targetResponse.status;
+      responseStatusText = targetResponse.statusText;
     } catch (networkError: unknown) {
       networkErrorDetails = networkError instanceof Error ? networkError.message : 'Network request failed';
       if (clientMockFallback) {
@@ -132,7 +211,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const durationMs = Math.round(performance.now() - requestStartedAt);
 
     const responseHeaders: Record<string, string> = {};
-    if (!usedMockFallback && targetResponse!) {
+    if (!usedMockFallback && targetResponse) {
       targetResponse.headers.forEach((value: string, key: string) => {
         responseHeaders[key] = value;
       });
@@ -152,7 +231,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         responseStatus: proxyStatus,
         responseBodyText,
         latencyMs: durationMs,
-        errorDetails: networkErrorDetails,
+        errorDetails: resolveRequestErrorDetails({
+          proxyStatus,
+          responseBodyText,
+          statusText: responseStatusText,
+          networkErrorDetails,
+          usedMockFallback,
+        }),
       });
     }
 
