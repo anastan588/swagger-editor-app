@@ -141,8 +141,10 @@
   },
   "HistoryPage": {
     "title": "Request History & Analytics",
+    "loading": "Loading history...",
     "emptyDescription": "You haven't executed any requests yet.",
-    "goToEditor": "Go to Editor & Viewer",
+    "goToEditor": "Go to Editor",
+    "goToViewer": "Go to Viewer",
     "statusCode": "Status code",
     "latency": "Latency",
     "requestSize": "Request size",
