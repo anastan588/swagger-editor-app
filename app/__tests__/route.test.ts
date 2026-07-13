@@ -149,6 +149,66 @@ describe('POST /api/proxy (Proxy Route Handler)', () => {
     expect(bodyObj.path).toBe('/data');
   });
 
+  it('should record HTTP error details from the response body for analytics', async () => {
+    const insertMock = vi.fn().mockResolvedValue({ error: null });
+    const fromMock = vi.fn().mockReturnValue({ insert: insertMock });
+
+    vi.mocked(updateSession).mockResolvedValue({
+      isLoggedIn: true,
+      userId: 'user_123',
+      supabase: { from: fromMock },
+    } as never);
+
+    const mockTargetResponse = new Response(JSON.stringify({ message: 'Unsupported Media Type' }), {
+      status: 415,
+      statusText: 'Unsupported Media Type',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(mockTargetResponse));
+
+    const req = createMockRequest({
+      body: { url: '/items', method: 'POST', headers: {}, body: '{}' },
+      headers: { 'X-Proxy-Target-Base': 'https://api.example.com' },
+    });
+
+    const res = await POST(req);
+    const json = (await res.json()) as { status: number };
+
+    expect(json.status).toBe(415);
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        response_status: 415,
+        error_details: 'Unsupported Media Type',
+      }),
+    );
+  });
+
+  it('should record network error details when fetch fails', async () => {
+    const insertMock = vi.fn().mockResolvedValue({ error: null });
+    const fromMock = vi.fn().mockReturnValue({ insert: insertMock });
+
+    vi.mocked(updateSession).mockResolvedValue({
+      isLoggedIn: true,
+      userId: 'user_123',
+      supabase: { from: fromMock },
+    } as never);
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')));
+
+    const req = createMockRequest({
+      body: { url: '/data', method: 'GET', headers: {} },
+      headers: { 'X-Proxy-Target-Base': 'https://api.example.com' },
+    });
+
+    await POST(req);
+
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        response_status: 200,
+        error_details: 'Network error',
+      }),
+    );
+  });
+
   it('should correctly handle critical exceptions and return 500', async () => {
     vi.mocked(updateSession).mockRejectedValue(new Error('Database error'));
 
